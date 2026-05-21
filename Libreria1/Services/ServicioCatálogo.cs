@@ -2,7 +2,7 @@ using Libreria1.Interfaces;
 
 namespace Libreria1.Services
 {
-    public class ServicioCatalogo : ICatalogo
+    public class ServicioCatalogo : ICatalogo<Libro>
     {
         private List<Libro> _libros;
 

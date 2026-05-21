@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Libreria1.Interfaces
 {
-	public interface ICatalogo
+	public interface ICatalogo<Libro>
     {
         void AgregarLibro(Libro libro);
         Libro?  BuscarLibroPorIsbn(Guid isbn);  
