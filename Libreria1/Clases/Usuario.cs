@@ -1,15 +1,20 @@
 public class Usuario
 {
-    private Guid Id { get; set; }
-    private string Nombre { get; set; }
-    private string email { get; set; }
-    private DateTime fechaRegistro { get; set; }
+    private Guid _id;
+    private string _nombre;
+    private string _email;
+    private DateTime _fechaRegistro;
+
+    public Guid Id => _id;
+    public string Nombre => _nombre;
+    public string email => _email;
+    public DateTime fechaRegistro => _fechaRegistro;
 
     public Usuario(string nombre, string correoElectronico)
     {
-        Id = Guid.NewGuid();
-        Nombre = nombre;
-        email = correoElectronico;
-        fechaRegistro = DateTime.Now;
+        _id = Guid.NewGuid();
+        _nombre = nombre;
+        _email = correoElectronico;
+        _fechaRegistro = DateTime.Now;
     }
 }
