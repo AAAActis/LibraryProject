@@ -4,37 +4,61 @@ namespace Libreria1.Services
 {
     public class ServicioCatalogo : ICatalogo<Libro>
     {
-        private List<Libro> _libros;
-
-        public ServicioCatalogo()
+        
+        private readonly IRepositorio<Libro> _repositorio;
+       
+        public ServicioCatalogo(IRepositorio<Libro> repositorio)
         {
-            _libros = new List<Libro>();
+            _repositorio = repositorio  ;
         }
 
-        public void AgregarLibro(Libro libro)
+        public void AgregarLibro(Libro entidad)
         {
-            _libros.Add(libro);
+            _repositorio.Agregar(entidad);
         }
 
         public Libro? BuscarLibroPorIsbn(Guid isbn)
         {
-            return _libros.FirstOrDefault(l => l.isbn == isbn);
+            Libro libro = _repositorio.ObtenerPorId(isbn);
+            if (libro == null)
+            {
+                throw new LibroNoEncontradoException();
+            }
+            else { return libro; }
         }
 
         public List<Libro> BuscarLibrosPorTitulo(string titulo)
         {
-            return _libros.Where(l => l.titulo.Contains(titulo, StringComparison.OrdinalIgnoreCase)).ToList();
+           List<Libro> libros = _repositorio.ObtenerTodos()
+                                .Where(l => l.titulo
+                                .Contains(titulo, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+            if (libros == null)
+            {
+                throw new LibroNoEncontradoException();
+            }
+            else { return libros; }
         }
-
         public List<Libro> BuscarLibrosPorAutor(string autor)
         {
-            return _libros.Where(l => l.autor.Contains(autor, StringComparison.OrdinalIgnoreCase)).ToList();
+            List<Libro> libros = _repositorio.ObtenerTodos()
+                                .Where(l => l.autor
+                                .Contains(autor, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+
+            if (_repositorio == null)
+            {
+                throw new LibroNoEncontradoException();
+            } else {
+            return libros;
+            }
         }
 
         public List<Libro> ListarTodos()
         {
-            return _libros.ToList();
+            return _repositorio.ObtenerTodos().ToList();
         }
+
     }
     
 }
