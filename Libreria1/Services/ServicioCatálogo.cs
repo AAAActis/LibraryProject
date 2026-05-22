@@ -17,7 +17,7 @@ namespace Libreria1.Services
             _repositorio.Agregar(entidad);
         }
 
-        public Libro? BuscarLibroPorIsbn(Guid isbn)
+        public Libro BuscarLibroPorIsbn(Guid isbn)
         {
             Libro libro = _repositorio.ObtenerPorId(isbn);
             if (libro == null)

@@ -1,35 +1,37 @@
+using Libreria1.Interfaces;
+
 public class ServicioUsuario : IUsuarios
 {
-    private List<Usuario> usuarios;
-    public ServicioUsuario()
+    private readonly IRepositorio<Usuario> _repositorio;
+    public ServicioUsuario(IRepositorio<Usuario> repositorio)
     {
-        usuarios = new List<Usuario>();
+        _repositorio = repositorio;
     }
 
     // Implementación de los métodos de la interfaz IUsuarios
     public void AgregarUsuario(Usuario usuario)
     {
-        usuarios.Add(usuario);
+        _repositorio.Agregar(usuario);
     }
     public Usuario BuscarUsuario(Guid idUsuario)
     {
-        var usuario = usuarios.FirstOrDefault(u => u.Id == idUsuario);
+        var usuario = _repositorio.ObtenerPorId(idUsuario);
         if (usuario == null)
         {
-            throw new Exception($"Usuario con ID '{idUsuario}' no encontrado.");
+            throw new UsuarioNoEncontradoException(idUsuario);
         }
         return usuario;
     }
     public List<Usuario> ListarUsuarios()
     {
-        return usuarios;
+        return _repositorio.ObtenerTodos().ToList();
     }
 
     // Métodos adicionales para la gestión de usuarios
     public Usuario RegistrarUsuario(string nombre, string email)
     {
         var nuevoUsuario = new Usuario(nombre, email);
-        usuarios.Add(nuevoUsuario);
+        _repositorio.Agregar(nuevoUsuario);
         Console.WriteLine($"Usuario '{nombre}' registrado exitosamente.");
         return nuevoUsuario;
     }
@@ -37,7 +39,14 @@ public class ServicioUsuario : IUsuarios
     public void EliminarUsuario(Guid idUsuario)
     {
         var usuario = BuscarUsuario(idUsuario);
-        usuarios.Remove(usuario);
+
+        if (usuario == null)
+        {
+            throw new UsuarioNoEncontradoException(idUsuario);
+        }
+        else {
+        _repositorio.Eliminar(idUsuario);
         Console.WriteLine($"Usuario con ID '{idUsuario}' eliminado exitosamente.");
+        }
     }
 }       
