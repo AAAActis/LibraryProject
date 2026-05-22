@@ -1,4 +1,4 @@
-public class Prestamo
+public class Prestamo : IEntidad
 {
     private Guid _id;
     private Libro _libroPrestado;

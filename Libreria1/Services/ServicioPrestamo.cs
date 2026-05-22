@@ -3,10 +3,9 @@ using Libreria1.Interfaces;
 
 public class ServicioPrestamo
 {
-        private ICatalogo<Libro> catalogo;
+       private ICatalogo<Libro> catalogo;
         private List<Prestamo> prestamos;
-        private IUsuarios servicioUsuarios;
-
+       private IUsuarios servicioUsuarios;
     public ServicioPrestamo(ICatalogo<Libro> catalogo, IUsuarios servicioUsuarios)
     {
         this.catalogo = catalogo;
@@ -15,16 +14,18 @@ public class ServicioPrestamo
     }
 
     public Prestamo PrestarLibro(Guid idUsuario, Guid isbnLibro)
-    {
+    {   
+        
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
+
         if (libro == null)
         {
-            throw new Exception("Libro no encontrado.");
+            throw new LibroNoEncontradoException();
         }
 
         if(!libro.estaDisponible)
         {
-            throw new Exception("El libro fue prestado.");
+            throw new LibroNoDisponibleException();
         }
 
         var usuario = servicioUsuarios.BuscarUsuario(idUsuario);
@@ -37,10 +38,10 @@ public class ServicioPrestamo
 
     public void DevolverLibro(Guid userid, string isbnLibro)
     {
-        var prestamo = prestamos.FirstOrDefault(p => p.id == userid && p.libroPrestado.isbn == Guid.Parse(isbnLibro) && p.Activo);
+        var prestamo = prestamos.FirstOrDefault(p => p.id == userid && p.libroPrestado.id == Guid.Parse(isbnLibro) && p.Activo);
         if (prestamo == null)
         {
-            throw new Exception("Préstamo no encontrado.");
+            throw new PrestamoNoEncontradoException();
         }
 
         if(prestamo.Activo == true)
