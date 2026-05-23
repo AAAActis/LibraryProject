@@ -17,13 +17,15 @@ class Program
         ServicioCatalogo servicioCatalogo = new ServicioCatalogo(repositorio);
         ServicioPrestamo servicioPrestamo = new ServicioPrestamo(catalogo, servicioUsuario);
 
-
+        Presenter presenter = new Presenter();
+        
         bool salir = false;
 
         while (!salir)
         {
             Console.Clear();
-            Console.WriteLine("==Sistema de Gestión de Biblioteca==");
+            
+            presenter.MostrarTitulo("Sistema de Gestión de Biblioteca");
             Console.WriteLine("Seleccione una opción:");
             Console.WriteLine("1. Agregar libro");
             Console.WriteLine("2. Buscar libro por ISBN");
