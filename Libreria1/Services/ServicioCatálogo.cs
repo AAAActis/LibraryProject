@@ -1,4 +1,4 @@
-using Libreria1.Interfaces;
+﻿using Libreria1.Interfaces;
 
 namespace Libreria1.Services
 {
@@ -17,7 +17,7 @@ namespace Libreria1.Services
             _repositorio.Agregar(entidad);
         }
 
-        public Libro? BuscarLibroPorIsbn(Guid isbn)
+        public Libro BuscarLibroPorIsbn(Guid isbn)
         {
             Libro libro = _repositorio.ObtenerPorId(isbn);
             if (libro == null)
@@ -57,6 +57,11 @@ namespace Libreria1.Services
         public List<Libro> ListarTodos()
         {
             return _repositorio.ObtenerTodos().ToList();
+        }
+
+        public void EliminarLibro(Guid isbn)
+        {
+            _repositorio.Eliminar(isbn);
         }
 
     }

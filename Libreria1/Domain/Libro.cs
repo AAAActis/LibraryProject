@@ -1,11 +1,11 @@
-public class Libro
+public class Libro : IEntidad
 {
     private Guid _isbn;
     private string _titulo;
     private string _autor;
     private bool _estaDisponible;
 
-    public Guid isbn => _isbn;
+    public Guid id => _isbn;
     public string titulo => _titulo;
     public string autor => _autor;
     public bool estaDisponible => _estaDisponible;
