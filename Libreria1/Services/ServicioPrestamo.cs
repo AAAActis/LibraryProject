@@ -55,4 +55,9 @@ public class ServicioPrestamo
             libro.MarcarDevuelto();
         }
     }
+
+    public List<Prestamo> ListarPrestamosActivos()
+    {
+        return prestamos.Where(p => p.Activo).ToList();
+    }
 }
