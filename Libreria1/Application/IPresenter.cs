@@ -1,8 +1,8 @@
-public interface IPresenter
+namespace Libreria1.Application
 {
-    public void MostrarMensaje(string m);
-
-    public void MostrarTitulo(string m);
-
-    
+    public interface IPresenter
+    {
+        void MostrarMensaje(string m);
+        void MostrarTitulo(string m);
+    }
 }

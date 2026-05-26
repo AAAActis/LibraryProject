@@ -1,4 +1,4 @@
-public class IEntidad
+public interface IEntidad
 {
-    public Guid Id { get; }
+    Guid id { get; }
 }

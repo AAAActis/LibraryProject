@@ -1,11 +1,11 @@
-using System.Data.Common;
+using System.Linq;
 using Libreria1.Interfaces;
 
 public class ServicioPrestamo
 {
-       private ICatalogo<Libro> catalogo;
-        private List<Prestamo> prestamos;
-       private IUsuarios servicioUsuarios;
+    private ICatalogo<Libro> catalogo;
+    private List<Prestamo> prestamos;
+    private IUsuarios servicioUsuarios;
     public ServicioPrestamo(ICatalogo<Libro> catalogo, IUsuarios servicioUsuarios)
     {
         this.catalogo = catalogo;
@@ -13,17 +13,12 @@ public class ServicioPrestamo
         prestamos = new List<Prestamo>();
     }
 
-    public Prestamo PrestarLibro(Guid idUsuario, Guid isbnLibro)
+    public Prestamo PrestarLibro(Guid idUsuario, string isbnLibro)
     {   
         
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
 
-        if (libro == null)
-        {
-            throw new LibroNoEncontradoException();
-        }
-
-        if(!libro.estaDisponible)
+        if (!libro.estaDisponible)
         {
             throw new LibroNoDisponibleException();
         }
@@ -38,22 +33,19 @@ public class ServicioPrestamo
 
     public void DevolverLibro(Guid userid, string isbnLibro)
     {
-        var prestamo = prestamos.FirstOrDefault(p => p.id == userid && p.libroPrestado.id == Guid.Parse(isbnLibro) && p.Activo);
+        var prestamo = prestamos.FirstOrDefault(p => p.id == userid && p.libroPrestado.isbn == isbnLibro && p.Activo);
         if (prestamo == null)
         {
             throw new PrestamoNoEncontradoException();
         }
 
-        if(prestamo.Activo == true)
+        if (prestamo.Activo)
         {
             prestamo.CambiarEstado();
         }
 
-        var libro = catalogo.BuscarLibroPorIsbn(Guid.Parse(isbnLibro));
-        if (libro != null)
-        {
-            libro.MarcarDevuelto();
-        }
+        var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
+        libro.MarcarDevuelto();
     }
 
     public List<Prestamo> ListarPrestamosActivos()

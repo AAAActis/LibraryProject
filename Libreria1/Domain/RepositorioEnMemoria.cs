@@ -17,7 +17,7 @@ namespace Libreria1.Repositories
 
         public T? ObtenerPorId(Guid id)
         {
-            return _datos.FirstOrDefault(e => e.Id == id);
+            return _datos.FirstOrDefault(e => e.id == id);
         }
 
         public IEnumerable<T> ObtenerTodos()

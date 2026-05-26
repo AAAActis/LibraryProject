@@ -25,6 +25,7 @@ public class Prestamo : IEntidad
         _usuarioAsignado = usuario;
         _fechaPrestamo = DateTime.Now;
         _fechaDevolucion = _fechaPrestamo.AddDays(14); // Plazo de 14 días para la devolución
+        _activo = true;
         _libroPrestado.MarcarPrestado();
     }
 
