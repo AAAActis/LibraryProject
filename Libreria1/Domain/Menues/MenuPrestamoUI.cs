@@ -1,4 +1,6 @@
 using Libreria1.Services;
+using Libreria1.Domain;
+using Libreria1.Application;
 
 public class MenuPrestamoUI
 {
@@ -55,8 +57,8 @@ public class MenuPrestamoUI
         string? isbnPrestamo = Console.ReadLine();
         try
         {
-            var usuario = _servicioUsuario.BuscarUsuario(Guid.Parse(idUsuarioPrestamo));
-            var prestamo = _servicioPrestamo.PrestarLibro(usuario.Id, Guid.Parse(isbnPrestamo));
+            var usuario = _servicioUsuario.BuscarUsuario(Guid.Parse(string.IsNullOrEmpty(idUsuarioPrestamo) ? string.Empty : idUsuarioPrestamo));
+            var prestamo = _servicioPrestamo.PrestarLibro(Guid.Parse(string.IsNullOrEmpty(idUsuarioPrestamo) ? string.Empty : idUsuarioPrestamo), string.IsNullOrEmpty(isbnPrestamo) ? string.Empty : isbnPrestamo);
             Console.WriteLine("Libro prestado exitosamente.");
         }
         catch (UsuarioNoEncontradoException)
@@ -81,7 +83,7 @@ public class MenuPrestamoUI
         string? isbnDevolucion = Console.ReadLine();
         try
         {
-            _servicioPrestamo.DevolverLibro(Guid.Parse(idUsuarioDevolucion), isbnDevolucion);
+            _servicioPrestamo.DevolverLibro(Guid.Parse(string.IsNullOrEmpty(idUsuarioDevolucion) ? string.Empty : idUsuarioDevolucion), string.IsNullOrEmpty(isbnDevolucion) ? string.Empty : isbnDevolucion);
             Console.WriteLine("Libro devuelto exitosamente.");
         }
         catch (PrestamoNoEncontradoException)

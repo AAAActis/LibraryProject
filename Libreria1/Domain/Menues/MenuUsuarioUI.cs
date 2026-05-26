@@ -1,4 +1,6 @@
 using Libreria1.Services;
+using Libreria1.Domain;
+using Libreria1.Application;
 
 public class MenuUsuarioUI
 {

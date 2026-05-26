@@ -1,6 +1,7 @@
 using Libreria1.Interfaces;
 using Libreria1.Services;
-
+using Libreria1.Application;
+using Libreria1.Domain;
 public class MenuLibroUI
 {
     private readonly ServicioCatalogo _servicioCatalogo;
@@ -50,7 +51,7 @@ public class MenuLibroUI
         string? isbnBuscar = Console.ReadLine();
         try
         {
-            Libro libroEncontrado = _servicioCatalogo.BuscarLibroPorIsbn(Guid.Parse(isbnBuscar));
+            Libro libroEncontrado = _servicioCatalogo.BuscarLibroPorIsbn(string.IsNullOrEmpty(isbnBuscar) ? string.Empty : isbnBuscar);
             Console.WriteLine($"Libro encontrado: {libroEncontrado.titulo} por {libroEncontrado.autor}");
         }
         catch (LibroNoEncontradoException)
@@ -104,8 +105,8 @@ public class MenuLibroUI
                     string? isbnEliminar = Console.ReadLine();
                     try
                     {
-                        Libro libroAEliminar = _servicioCatalogo.BuscarLibroPorIsbn(Guid.Parse(isbnEliminar));
-                        _servicioCatalogo.EliminarLibro(libroAEliminar.id);
+                        Libro libroAEliminar = _servicioCatalogo.BuscarLibroPorIsbn(string.IsNullOrEmpty(isbnEliminar) ? string.Empty : isbnEliminar);
+                        _servicioCatalogo.EliminarLibro(string.IsNullOrEmpty(isbnEliminar) ? string.Empty : isbnEliminar);
                         Console.WriteLine("Libro eliminado exitosamente.");
                     }
                     catch (LibroNoEncontradoException)
