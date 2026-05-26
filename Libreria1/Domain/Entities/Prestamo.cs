@@ -1,11 +1,11 @@
 public class Prestamo : IEntidad
 {
-    private Guid _id;
-    private Libro _libroPrestado;
-    private Usuario _usuarioAsignado;
-    private DateTime _fechaPrestamo;
-    private DateTime _fechaDevolucion;
-    private bool _activo;
+    private Guid _id {get;}
+    private Libro _libroPrestado {get;}
+    private Usuario _usuarioAsignado {get;}
+    private DateTime _fechaPrestamo {get;}
+    private DateTime _fechaDevolucion {get;}
+    private bool _activo {get; set;}
 
     public Guid id => _id;
     public Libro libroPrestado => _libroPrestado;
