@@ -32,7 +32,6 @@ public class ServicioUsuario : IUsuarios
     {
         var nuevoUsuario = new Usuario(nombre, email);
         _repositorio.Agregar(nuevoUsuario);
-        Console.WriteLine($"Usuario '{nombre}' registrado exitosamente.");
         return nuevoUsuario;
     }
     
@@ -40,13 +39,9 @@ public class ServicioUsuario : IUsuarios
     {
         var usuario = BuscarUsuario(idUsuario);
 
-        if (usuario == null)
+        if (usuario != null)
         {
-            throw new UsuarioNoEncontradoException(idUsuario);
-        }
-        else {
-        _repositorio.Eliminar(idUsuario);
-        Console.WriteLine($"Usuario con ID '{idUsuario}' eliminado exitosamente.");
+            _repositorio.Eliminar(idUsuario);
         }
     }
 }       
