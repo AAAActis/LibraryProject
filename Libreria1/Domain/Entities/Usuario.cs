@@ -1,9 +1,10 @@
+//Responsabilidad unica: Representar un usuario en el sistema de biblioteca.
 public class Usuario : IEntidad
 {
-    private Guid _id;
-    private string _nombre;
-    private string _email;
-    private DateTime _fechaRegistro;
+    private Guid _id {get;}
+    private string _nombre {get;}
+    private string _email {get;}
+    private DateTime _fechaRegistro {get;}
 
     public Guid id => _id;
     public string nombre => _nombre;

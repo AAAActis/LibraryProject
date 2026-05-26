@@ -1,10 +1,11 @@
+//Responsabilidad unica: Representar un libro en el sistema de biblioteca.
 public class Libro : IEntidad
 {
-    private Guid _id;
-    private string _isbn;
-    private string _titulo;
-    private string _autor;
-    private bool _estaDisponible;
+    private Guid _id {get;}
+    private string _isbn {get;}
+    private string _titulo {get;}
+    private string _autor {get;}
+    private bool _estaDisponible {get; set;} 
 
     public Guid id => _id;
     public string isbn => _isbn;
