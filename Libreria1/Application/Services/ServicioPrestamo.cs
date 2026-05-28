@@ -8,12 +8,14 @@ public class ServicioPrestamo
     private readonly ICatalogo<Libro> catalogo;
     private readonly IUsuarios servicioUsuarios;
     private readonly IRepositorio<Prestamo> repositorioPrestamos;
-    public ServicioPrestamo(ICatalogo<Libro> catalogo, IUsuarios servicioUsuarios, IRepositorio<Prestamo> repositorioPrestamos)
+    private readonly IServicioMulta servicioMultas;
+    public ServicioPrestamo(ICatalogo<Libro> catalogo, IUsuarios servicioUsuarios, IRepositorio<Prestamo> repositorioPrestamos, IServicioMulta servicioMultas)
     {
 
         this.catalogo = catalogo;
         this.servicioUsuarios = servicioUsuarios;
         this.repositorioPrestamos = repositorioPrestamos;
+        this.servicioMultas = servicioMultas;
     }
 
     public Prestamo PrestarLibro(Guid idUsuario, string isbnLibro)
@@ -44,11 +46,12 @@ public class ServicioPrestamo
     public void DevolverLibro(Guid userid, string isbnLibro)
     {
         var prestamo = repositorioPrestamos.ObtenerTodos()
-            .FirstOrDefault(p => p.usuarioAsignado.id == userid && p.libroPrestado.isbn == isbnLibro && p.Activo);
+            .FirstOrDefault(p => p.UsuarioAsignado.id == userid && p.LibroPrestado.Isbn == isbnLibro && p.Activo);
         if (prestamo == null)
         {
             throw new PrestamoNoEncontradoException();
         }
+        servicioMultas.CalcularMulta(prestamo);
 
         if (prestamo.Activo)
         {
@@ -69,8 +72,8 @@ public class ServicioPrestamo
     public List<Prestamo> ListarPrestamosPorUsuario(Guid idUsuario)
     {
         return repositorioPrestamos.ObtenerTodos()
-        .Where(p => p.usuarioAsignado.id == idUsuario)
-        .ToList();
+        .Where(p => p.UsuarioAsignado.id == idUsuario)
+        .ToList();  
     }
 
     // validar que el usuario no tenga más de 3 libros prestados
@@ -90,7 +93,7 @@ public class ServicioPrestamo
     public void ValidarDisponibilidadLibro(string isbnLibro)
     {
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
-        if (!libro.estaDisponible)
+        if (!libro.EstaDisponible)
         {
             throw new LibroNoDisponibleException();
         }
