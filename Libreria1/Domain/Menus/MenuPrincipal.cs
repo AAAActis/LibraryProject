@@ -1,4 +1,4 @@
-using Libreria1.Application;
+
 
 namespace Libreria1.Domain.Menus
 {
@@ -8,8 +8,7 @@ namespace Libreria1.Domain.Menus
         private readonly UsuarioMenu _usuarioMenu;
         private readonly PrestamoMenu _prestamoMenu;
 
-        public MenuPrincipal(LibroMenu libroMenu, UsuarioMenu usuarioMenu, PrestamoMenu prestamoMenu, IPresenter presenter)
-            : base(presenter)
+        public MenuPrincipal(LibroMenu libroMenu, UsuarioMenu usuarioMenu, PrestamoMenu prestamoMenu)
         {
             _libroMenu = libroMenu;
             _usuarioMenu = usuarioMenu;

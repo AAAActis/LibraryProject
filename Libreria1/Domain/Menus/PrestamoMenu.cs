@@ -1,5 +1,4 @@
 using System;
-using Libreria1.Application;
 using Libreria1.Services;
 
 namespace Libreria1.Domain.Menus
@@ -10,8 +9,7 @@ namespace Libreria1.Domain.Menus
         private readonly ServicioCatalogo _servicioCatalogo;
         private readonly ServicioUsuario _servicioUsuario;
 
-        public PrestamoMenu(ServicioPrestamo servicioPrestamo, ServicioCatalogo servicioCatalogo, ServicioUsuario servicioUsuario, IPresenter presenter)
-            : base(presenter)
+        public PrestamoMenu(ServicioPrestamo servicioPrestamo, ServicioCatalogo servicioCatalogo, ServicioUsuario servicioUsuario)
         {
             _servicioPrestamo = servicioPrestamo;
             _servicioCatalogo = servicioCatalogo;
@@ -143,7 +141,7 @@ namespace Libreria1.Domain.Menus
                 Console.WriteLine("Préstamos activos:");
                 foreach (var prestamo in prestamosActivos)
                 {
-                    Console.WriteLine($"Usuario: {prestamo.usuarioAsignado.nombre}, Libro: {prestamo.libroPrestado.titulo}");
+                    Console.WriteLine($"Usuario: {prestamo.UsuarioAsignado.Nombre}, Libro: {prestamo.LibroPrestado.Titulo}");
                 }
             }
             else
