@@ -1,5 +1,4 @@
 using System;
-using Libreria1.Application;
 using Libreria1.Services;
 
 namespace Libreria1.Domain.Menus
@@ -8,8 +7,7 @@ namespace Libreria1.Domain.Menus
     {
         private readonly ServicioUsuario _servicioUsuario;
 
-        public UsuarioMenu(ServicioUsuario servicioUsuario, IPresenter presenter)
-            : base(presenter)
+        public UsuarioMenu(ServicioUsuario servicioUsuario)
         {
             _servicioUsuario = servicioUsuario;
         }
@@ -78,7 +76,7 @@ namespace Libreria1.Domain.Menus
             try
             {
                 Usuario usuarioEncontrado = _servicioUsuario.BuscarUsuario(id);
-                MostrarMensaje($"Usuario encontrado: {usuarioEncontrado.nombre} ({usuarioEncontrado.email})");
+                MostrarMensaje($"Usuario encontrado: {usuarioEncontrado.Nombre} ({usuarioEncontrado.Email})");
             }
             catch (UsuarioNoEncontradoException)
             {

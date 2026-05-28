@@ -1,5 +1,4 @@
 using System;
-using Libreria1.Application;
 using Libreria1.Services;
 
 namespace Libreria1.Domain.Menus
@@ -8,8 +7,7 @@ namespace Libreria1.Domain.Menus
     {
         private readonly ServicioCatalogo _servicioCatalogo;
 
-        public LibroMenu(ServicioCatalogo servicioCatalogo, IPresenter presenter)
-            : base(presenter)
+        public LibroMenu(ServicioCatalogo servicioCatalogo)
         {
             _servicioCatalogo = servicioCatalogo;
         }
@@ -95,7 +93,7 @@ namespace Libreria1.Domain.Menus
             try
             {
                 Libro libroEncontrado = _servicioCatalogo.BuscarLibroPorIsbn(isbn);
-                MostrarMensaje($"Libro encontrado: {libroEncontrado.titulo} por {libroEncontrado.autor}");
+                MostrarMensaje($"Libro encontrado: {libroEncontrado.Titulo} por {libroEncontrado.Autor}");
             }
             catch (LibroNoEncontradoException)
             {
@@ -115,7 +113,7 @@ namespace Libreria1.Domain.Menus
                 Console.WriteLine("Libros encontrados:");
                 foreach (var libro in librosEncontrados)
                 {
-                    Console.WriteLine($"{libro.titulo} por {libro.autor}");
+                    Console.WriteLine($"{libro.Titulo} por {libro.Autor}");
                 }
             }
             else

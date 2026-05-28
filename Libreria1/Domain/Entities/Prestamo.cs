@@ -1,45 +1,39 @@
 public class Prestamo : IEntidad
 {
-    private Guid _id {get;}
-    private Libro _libroPrestado {get;}
-    private Usuario _usuarioAsignado {get;}
-    private DateTime _fechaPrestamo {get;}
-    private DateTime _fechaDevolucion {get;}
-    private bool _activo {get; set;}
+    public Guid id {get; private set;} = Guid.NewGuid();
+    public Libro LibroPrestado {get; private set;}
+    public Usuario UsuarioAsignado {get; private set;}
+    public DateTime FechaPrestamo {get; private set;}
+    public DateTime FechaDevolucion {get; private set;}
+    public bool Activo {get; private set;}
 
-    public Guid id => _id;
-    public Libro libroPrestado => _libroPrestado;
-    public Usuario usuarioAsignado => _usuarioAsignado;
-    public DateTime fechaPrestamo => _fechaPrestamo;
-    public DateTime fechaDevolucion => _fechaDevolucion;
-    
-    public bool Activo => _activo;    
-    public string titulo => _libroPrestado.titulo;
-    public string autor => _libroPrestado.autor;
-    public bool estaDisponible => _libroPrestado.estaDisponible;
+
+    public string titulo => LibroPrestado.Titulo;
+    public string autor => LibroPrestado.Autor;
+    public bool estaDisponible => LibroPrestado.EstaDisponible;
 
     public Prestamo(Libro libro, Usuario usuario)
     {
-        _id = Guid.NewGuid();
-        _libroPrestado = libro;
-        _usuarioAsignado = usuario;
-        _fechaPrestamo = DateTime.Now;
-        _fechaDevolucion = _fechaPrestamo.AddDays(14); // Plazo de 14 días para la devolución
-        _activo = true;
-        _libroPrestado.MarcarPrestado();
+        id = Guid.NewGuid();
+        LibroPrestado = libro;
+        UsuarioAsignado = usuario;
+        FechaPrestamo = DateTime.Now;
+        FechaDevolucion = FechaPrestamo.AddDays(14); // Plazo de 14 días para la devolución
+        Activo = true;
+        LibroPrestado.MarcarPrestado();
     }
 
     public void CambiarEstado()
     {
-        if (_activo)
+        if (Activo)
         {
-            _activo = false;
-            _libroPrestado.MarcarDevuelto();
+            Activo = false;
+            LibroPrestado.MarcarDevuelto();
         }
         else
         {
-            _activo = true;
-            _libroPrestado.MarcarPrestado();
+            Activo = true;
+            LibroPrestado.MarcarPrestado();
         }
     }
 }
