@@ -6,12 +6,10 @@ using Libreria1.Interfaces;
 public class ServicioMultas : IServicioMulta
 {
     private readonly IRepositorio<Multa> repositorioMultas;
-    private readonly IRepositorio<Prestamo> repositorioPrestamos;
 
-    public ServicioMultas(IRepositorio<Multa> repositorioMultas, IRepositorio<Prestamo> repositorioPrestamos)
+    public ServicioMultas(IRepositorio<Multa> repositorioMultas)
     {
         this.repositorioMultas = repositorioMultas;
-        this.repositorioPrestamos = repositorioPrestamos;
     }
 
     public Multa CalcularMulta (Prestamo prestamo)
@@ -35,7 +33,7 @@ public class ServicioMultas : IServicioMulta
     public List<Multa> ObtenerMultasPorUsuario(Usuario usuario)
     {
         return repositorioMultas.ObtenerTodos()
-        .Where(m => m.PrestamoAsignado.UsuarioAsignado.id == usuario.id)
+        .Where(m => m.PrestamoAsignado.UsuarioAsignado.Id == usuario.Id)
         .ToList();  
     }
 

@@ -5,7 +5,7 @@ using Libreria1.Interfaces;
 
 namespace Libreria1.Repositories
 {
-    public class RepositorioEnMemoria<T> : IRepositorio<T> where T : IEntidad
+    public class RepositorioEnMemoria<T> : IRepositorio<T> where T : IEntidad<Guid>
     {
         // Acá centralizamos el almacenamiento temporal
         private readonly List<T> _datos = new List<T>();
@@ -17,7 +17,7 @@ namespace Libreria1.Repositories
 
         public T? ObtenerPorId(Guid id)
         {
-            return _datos.FirstOrDefault(e => e.id == id);
+            return _datos.FirstOrDefault(e => e.Id == id);
         }
 
         public IEnumerable<T> ObtenerTodos()

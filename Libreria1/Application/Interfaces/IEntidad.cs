@@ -1,4 +1,4 @@
-public interface IEntidad
+public interface IEntidad<TipoId>
 {
-    Guid id { get; }
+    TipoId Id { get; }
 }

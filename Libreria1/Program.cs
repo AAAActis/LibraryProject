@@ -11,7 +11,7 @@ class Program
         IRepositorio<Usuario> repositorioUsuario = new RepositorioEnMemoria<Usuario>();
         IRepositorio<Prestamo> repositorioPrestamos = new RepositorioEnMemoria<Prestamo>();
         IRepositorio<Multa> repositorioMultas = new RepositorioEnMemoria<Multa>();
-        IServicioMulta servicioMultas = new ServicioMultas(repositorioMultas, repositorioPrestamos);
+        IServicioMulta servicioMultas = new ServicioMultas(repositorioMultas);
 
         var servicioUsuario = new ServicioUsuario(repositorioUsuario);
         var servicioCatalogo = new ServicioCatalogo(repositorio);

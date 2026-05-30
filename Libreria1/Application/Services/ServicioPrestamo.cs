@@ -18,7 +18,7 @@ public class ServicioPrestamo
         this.servicioMultas = servicioMultas;
     }
 
-    public Prestamo PrestarLibro(Guid idUsuario, string isbnLibro)
+    public Prestamo PrestarLibro(int nroSocio, string isbnLibro)
     {
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
         if (libro == null)
@@ -29,13 +29,13 @@ public class ServicioPrestamo
         ValidarDisponibilidadLibro(isbnLibro);
     
         // validar que el usuario no tenga más de 3 libros prestados
-        ValidarLimitePrestamos(idUsuario);
+        ValidarLimitePrestamos(nroSocio);
 
         // marcar el libro como prestado
         libro.MarcarPrestado();
 
         // crear el préstamo 
-        var usuario = servicioUsuarios.BuscarUsuario(idUsuario);
+        var usuario = servicioUsuarios.BuscarPorNumeroSocio(nroSocio);
         var nuevoPrestamo = new Prestamo(libro, usuario);
 
         repositorioPrestamos.Agregar(nuevoPrestamo);
@@ -43,10 +43,10 @@ public class ServicioPrestamo
     }
             
 
-    public void DevolverLibro(Guid userid, string isbnLibro)
+    public void DevolverLibro(int nroSocio, string isbnLibro)
     {
         var prestamo = repositorioPrestamos.ObtenerTodos()
-            .FirstOrDefault(p => p.UsuarioAsignado.id == userid && p.LibroPrestado.Isbn == isbnLibro && p.Activo);
+            .FirstOrDefault(p => p.UsuarioAsignado.NroSocio == nroSocio && p.LibroPrestado.Isbn == isbnLibro && p.Activo);
         if (prestamo == null)
         {
             throw new PrestamoNoEncontradoException();
@@ -69,17 +69,17 @@ public class ServicioPrestamo
         .ToList();
     }
 
-    public List<Prestamo> ListarPrestamosPorUsuario(Guid idUsuario)
+    public List<Prestamo> ListarPrestamosPorUsuario(int nroSocio)
     {
         return repositorioPrestamos.ObtenerTodos()
-        .Where(p => p.UsuarioAsignado.id == idUsuario)
+        .Where(p => p.UsuarioAsignado.NroSocio == nroSocio)
         .ToList();  
     }
 
     // validar que el usuario no tenga más de 3 libros prestados
-    public void ValidarLimitePrestamos(Guid idUsuario)
+    public void ValidarLimitePrestamos(int nroSocio)
     {
-        var prestamosActivos = ListarPrestamosPorUsuario(idUsuario)
+        var prestamosActivos = ListarPrestamosPorUsuario(nroSocio)
             .Where(p => p.Activo)
             .Count();
 

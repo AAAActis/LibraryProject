@@ -1,7 +1,7 @@
-public class Multa : IEntidad
+public class Multa : IEntidad<Guid>
 {
     /// Responsabilidad única: Representa una penalización económica por la devolución tardía de un préstamo y calcula su costo.
-    public Guid id { get; private set; } = Guid.NewGuid();
+    public Guid Id { get; private set; } = Guid.NewGuid();
     public Prestamo PrestamoAsignado { get; private set; } 
     public int DiasRetraso { get; private set; }
     public decimal MontoMulta { get; private set; }
