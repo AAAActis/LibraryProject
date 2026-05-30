@@ -20,6 +20,12 @@ public class ServicioPrestamo
 
     public Prestamo PrestarLibro(int nroSocio, string isbnLibro)
     {
+        // validar que el usuario exista
+        var usuario = servicioUsuarios.BuscarPorNumeroSocio(nroSocio);
+        if (usuario == null)
+        {
+            throw new UsuarioNoEncontradoException($"Usuario con número de socio '{nroSocio}' no encontrado.");
+        }
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
         if (libro == null)
         {
@@ -35,7 +41,7 @@ public class ServicioPrestamo
         libro.MarcarPrestado();
 
         // crear el préstamo 
-        var usuario = servicioUsuarios.BuscarPorNumeroSocio(nroSocio);
+        var Usuario = servicioUsuarios.BuscarPorNumeroSocio(nroSocio);
         var nuevoPrestamo = new Prestamo(libro, usuario);
 
         repositorioPrestamos.Agregar(nuevoPrestamo);
@@ -45,8 +51,12 @@ public class ServicioPrestamo
 
     public void DevolverLibro(int nroSocio, string isbnLibro)
     {
+        // validar que el prestamo pertenece al usuario
+
         var prestamo = repositorioPrestamos.ObtenerTodos()
-            .FirstOrDefault(p => p.UsuarioAsignado.NroSocio == nroSocio && p.LibroPrestado.Isbn == isbnLibro && p.Activo);
+            .FirstOrDefault(p => p.UsuarioAsignado.NroSocio == nroSocio
+            && p.LibroPrestado.Isbn == isbnLibro 
+            && p.Activo);
         if (prestamo == null)
         {
             throw new PrestamoNoEncontradoException();

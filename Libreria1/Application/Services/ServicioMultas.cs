@@ -17,7 +17,7 @@ public class ServicioMultas : IServicioMulta
         //verificar si el prestamo esta vencido antes de calcular multa
         if (prestamo == null)
         {
-            throw new PrestamoNoEncontradoException();
+            throw new PrestamoNoEncontradoException("Prestamo no encontrado");  
         }
         // calcular multa
         var diasRetraso = (DateTime.Now - prestamo.FechaPrestamo).Days - 30;
