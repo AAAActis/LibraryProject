@@ -9,7 +9,7 @@ public class RepositorioMultas : RepositorioEnMemoria<Multa>
     // Este repositorio se encarga exclusivamente de gestionar las multas, utilizando la implementación en memoria para almacenamiento temporal.
     public IEnumerable<Multa> ObtenerMultasPorPrestamo(Guid prestamoId)
     {
-        return ObtenerTodos().Where(m => m.PrestamoAsignado.id == prestamoId);
+        return ObtenerTodos().Where(m => m.PrestamoAsignado.Id == prestamoId);
     }
 
     public IEnumerable<Multa> ObtenerMultasVencidas()

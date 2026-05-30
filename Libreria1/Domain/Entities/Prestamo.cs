@@ -1,6 +1,6 @@
-public class Prestamo : IEntidad
+public class Prestamo : IEntidad<Guid>
 {
-    public Guid id {get; private set;} = Guid.NewGuid();
+    public Guid Id {get; private set;} = Guid.NewGuid();
     public Libro LibroPrestado {get; private set;}
     public Usuario UsuarioAsignado {get; private set;}
     public DateTime FechaPrestamo {get; private set;}
@@ -14,7 +14,7 @@ public class Prestamo : IEntidad
 
     public Prestamo(Libro libro, Usuario usuario)
     {
-        id = Guid.NewGuid();
+        Id = Guid.NewGuid();
         LibroPrestado = libro;
         UsuarioAsignado = usuario;
         FechaPrestamo = DateTime.Now;

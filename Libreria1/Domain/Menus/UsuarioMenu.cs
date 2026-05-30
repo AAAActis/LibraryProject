@@ -1,13 +1,13 @@
 using System;
-using Libreria1.Services;
+using Libreria1.Interfaces;
 
 namespace Libreria1.Domain.Menus
 {
     public class UsuarioMenu : MenuBase
     {
-        private readonly ServicioUsuario _servicioUsuario;
+        private readonly IUsuarios _servicioUsuario;
 
-        public UsuarioMenu(ServicioUsuario servicioUsuario)
+        public UsuarioMenu(IUsuarios servicioUsuario)
         {
             _servicioUsuario = servicioUsuario;
         }
@@ -21,7 +21,8 @@ namespace Libreria1.Domain.Menus
                 Console.Clear();
                 MostrarTitulo("Menú de Usuarios");
                 Console.WriteLine("1. Registrar usuario");
-                Console.WriteLine("2. Buscar usuario por ID");
+                Console.WriteLine("2. Buscar usuario por número de socio");
+                Console.WriteLine("3. Eliminar usuario por número de socio");
                 Console.WriteLine("0. Volver al menú principal");
                 Console.Write("Opción: ");
 
@@ -33,7 +34,10 @@ namespace Libreria1.Domain.Menus
                         RegistrarUsuario();
                         break;
                     case "2":
-                        BuscarUsuarioPorId();
+                        BuscarUsuarioPorNumeroSocio();
+                        break;
+                    case "3":
+                        EliminarUsuarioPorNumeroSocio();
                         break;
                     case "0":
                         volver = true;
@@ -58,29 +62,59 @@ namespace Libreria1.Domain.Menus
             Console.Write("Ingrese el email del usuario: ");
             string? emailUsuario = Console.ReadLine();
 
-            _servicioUsuario.AgregarUsuario(new Usuario(nombreUsuario ?? string.Empty, emailUsuario ?? string.Empty));
-            MostrarMensaje("Usuario registrado exitosamente.");
+            var creado = _servicioUsuario.RegistrarUsuario(nombreUsuario ?? string.Empty, emailUsuario ?? string.Empty);
+            MostrarMensaje($"Usuario creado con numero de socio: {creado.NroSocio}");
         }
 
-        private void BuscarUsuarioPorId()
+        private void BuscarUsuarioPorNumeroSocio()
         {
-            Console.Write("Ingrese el ID del usuario a buscar: ");
-            string? idUsuario = Console.ReadLine();
+            Console.Write("Ingrese el número de socio del usuario a buscar: ");
+            string? nro = Console.ReadLine();
 
-            if (!Guid.TryParse(idUsuario, out Guid id))
+            if (!int.TryParse(nro, out int nroSocio))
             {
-                MostrarMensaje("ID inválido.");
+                MostrarMensaje("Número de socio inválido.");
                 return;
             }
 
             try
             {
-                Usuario usuarioEncontrado = _servicioUsuario.BuscarUsuario(id);
-                MostrarMensaje($"Usuario encontrado: {usuarioEncontrado.Nombre} ({usuarioEncontrado.Email})");
+                Usuario usuarioEncontrado = _servicioUsuario.BuscarPorNumeroSocio(nroSocio);
+                MostrarMensaje($"Usuario encontrado: {usuarioEncontrado.Nombre} ({usuarioEncontrado.Email}) - Id: {usuarioEncontrado.Id}");
             }
-            catch (UsuarioNoEncontradoException)
+            catch (UsuarioNoEncontradoException ex)
             {
-                MostrarMensaje("Usuario no encontrado.");
+                MostrarMensaje(ex.Message);
+            }
+        }
+
+        private void EliminarUsuarioPorNumeroSocio()
+        {
+            Console.Write("Ingrese el número de socio del usuario a eliminar: ");
+            string? nro = Console.ReadLine();
+
+            if (!int.TryParse(nro, out int nroSocio))
+            {
+                MostrarMensaje("Número de socio inválido.");
+                return;
+            }
+
+            try
+            {
+                var usuario = _servicioUsuario.BuscarPorNumeroSocio(nroSocio);
+                var eliminado = _servicioUsuario.EliminarUsuario(usuario.Id);
+                if (eliminado)
+                {
+                    MostrarMensaje($"Usuario eliminado con Id {usuario.Id} y número de socio {usuario.NroSocio}");
+                }
+                else
+                {
+                    MostrarMensaje("Error al eliminar el usuario.");
+                }
+            }
+            catch (UsuarioNoEncontradoException ex)
+            {
+                MostrarMensaje(ex.Message);
             }
         }
     }

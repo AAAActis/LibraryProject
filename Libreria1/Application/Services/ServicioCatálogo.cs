@@ -20,7 +20,7 @@ namespace Libreria1.Services
         public Libro BuscarLibroPorIsbn(string isbn)
         {
             var libro = _repositorio.ObtenerTodos()
-                .FirstOrDefault(l => l.isbn == isbn);
+                .FirstOrDefault(l => l.Isbn == isbn);
 
             if (libro == null)
             {
@@ -34,7 +34,7 @@ namespace Libreria1.Services
         {
             string termino = titulo ?? string.Empty;
             List<Libro> libros = _repositorio.ObtenerTodos()
-                                .Where(l => l.titulo
+                                .Where(l => l.Titulo
                                 .Contains(termino, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
 
@@ -45,7 +45,7 @@ namespace Libreria1.Services
         {
             string termino = autor ?? string.Empty;
             List<Libro> libros = _repositorio.ObtenerTodos()
-                                .Where(l => l.autor
+                                .Where(l => l.Autor
                                 .Contains(termino, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
 
@@ -59,13 +59,13 @@ namespace Libreria1.Services
 
         public void EliminarLibro(string isbn)
         {
-            var libro = _repositorio.ObtenerTodos().FirstOrDefault(l => l.isbn == isbn);
+            var libro = _repositorio.ObtenerTodos().FirstOrDefault(l => l.Isbn == isbn);
             if (libro == null)
             {
                 throw new LibroNoEncontradoException();
             }
 
-            _repositorio.Eliminar(libro.id);
+            _repositorio.Eliminar(libro.Id);
         }
 
     }

@@ -1,7 +1,7 @@
 //Responsabilidad unica: Representar un libro en el sistema de biblioteca.
-public class Libro : IEntidad
+public class Libro : IEntidad<Guid>
 {
-    public Guid id {get; private set;} = Guid.NewGuid();
+    public Guid Id {get; private set;} = Guid.NewGuid();
     public string Isbn {get; private set;}
     public string Titulo {get; private set;}
     public string Autor {get; private set;}
@@ -10,7 +10,7 @@ public class Libro : IEntidad
 
     public Libro(string isbn, string titulo, string autor)
     {
-        id = Guid.NewGuid();
+        Id = Guid.NewGuid();
         Isbn = isbn;
         Titulo = titulo;
         Autor = autor;

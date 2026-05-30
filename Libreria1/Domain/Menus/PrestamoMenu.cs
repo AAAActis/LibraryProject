@@ -1,4 +1,5 @@
 using System;
+using Libreria1.Interfaces;
 using Libreria1.Services;
 
 namespace Libreria1.Domain.Menus
@@ -7,9 +8,9 @@ namespace Libreria1.Domain.Menus
     {
         private readonly ServicioPrestamo _servicioPrestamo;
         private readonly ServicioCatalogo _servicioCatalogo;
-        private readonly ServicioUsuario _servicioUsuario;
+        private readonly IUsuarios _servicioUsuario;
 
-        public PrestamoMenu(ServicioPrestamo servicioPrestamo, ServicioCatalogo servicioCatalogo, ServicioUsuario servicioUsuario)
+        public PrestamoMenu(ServicioPrestamo servicioPrestamo, ServicioCatalogo servicioCatalogo, IUsuarios servicioUsuario)
         {
             _servicioPrestamo = servicioPrestamo;
             _servicioCatalogo = servicioCatalogo;
@@ -60,12 +61,12 @@ namespace Libreria1.Domain.Menus
 
         private void PrestarLibro()
         {
-            Console.Write("Ingrese el ID del usuario que va a prestar el libro: ");
-            string? idUsuarioPrestamo = Console.ReadLine();
+            Console.Write("Ingrese el numero de socio del usuario que va a prestar el libro: ");
+            string? nroSocioPrestamo = Console.ReadLine();
 
-            if (!Guid.TryParse(idUsuarioPrestamo, out Guid usuarioId))
+            if (!int.TryParse(nroSocioPrestamo, out int nroSocio))
             {
-                MostrarMensaje("ID de usuario inválido.");
+                MostrarMensaje("Número de socio inválido.");
                 return;
             }
 
@@ -80,7 +81,7 @@ namespace Libreria1.Domain.Menus
 
             try
             {
-                _servicioPrestamo.PrestarLibro(usuarioId, isbn);
+                _servicioPrestamo.PrestarLibro(nroSocio, isbn);
                 MostrarMensaje("Libro prestado exitosamente.");
             }
             catch (UsuarioNoEncontradoException)
@@ -99,12 +100,12 @@ namespace Libreria1.Domain.Menus
 
         private void DevolverLibro()
         {
-            Console.Write("Ingrese el ID del usuario que va a devolver el libro: ");
-            string? idUsuarioDevolucion = Console.ReadLine();
+            Console.Write("Ingrese el número de socio del usuario que va a devolver el libro: ");
+            string? nroSocioDevolucion = Console.ReadLine();
 
-            if (!Guid.TryParse(idUsuarioDevolucion, out Guid usuarioId))
+            if (!int.TryParse(nroSocioDevolucion, out int nroSocio))
             {
-                MostrarMensaje("ID de usuario inválido.");
+                MostrarMensaje("Número de socio inválido.");
                 return;
             }
 
@@ -119,7 +120,7 @@ namespace Libreria1.Domain.Menus
 
             try
             {
-                _servicioPrestamo.DevolverLibro(usuarioId, isbn);
+                _servicioPrestamo.DevolverLibro(nroSocio, isbn);
                 MostrarMensaje("Libro devuelto exitosamente.");
             }
             catch (PrestamoNoEncontradoException)

@@ -10,10 +10,12 @@ class Program
         IRepositorio<Libro> repositorio = new RepositorioEnMemoria<Libro>();
         IRepositorio<Usuario> repositorioUsuario = new RepositorioEnMemoria<Usuario>();
         IRepositorio<Prestamo> repositorioPrestamos = new RepositorioEnMemoria<Prestamo>();
+        IRepositorio<Multa> repositorioMultas = new RepositorioEnMemoria<Multa>();
+        IServicioMulta servicioMultas = new ServicioMultas(repositorioMultas);
 
         var servicioUsuario = new ServicioUsuario(repositorioUsuario);
         var servicioCatalogo = new ServicioCatalogo(repositorio);
-        var servicioPrestamo = new ServicioPrestamo(servicioCatalogo, servicioUsuario, repositorioPrestamos);
+        var servicioPrestamo = new ServicioPrestamo(servicioCatalogo, servicioUsuario, repositorioPrestamos, servicioMultas);
 
 
         var libroMenu = new LibroMenu(servicioCatalogo);
