@@ -1,17 +1,32 @@
-# LibraryProject
+## LibraryProject
 
-## Flujo de Trabajo Git (Git Workflow)
+> Aplicación de consola para la gestión de una biblioteca, enfocada en el manejo eficiente del catálogo y administración de préstamos.
 
-Para mantener el código ordenado, evitar conflictos graves y asegurar la calidad del código, este proyecto utiliza un modelo basado en **Feature Branches** y **Pull Requests**. 
+## Tecnologías Utilizadas
+* **Lenguaje:** C#
+* **Framework:** .NET 10
+* **Persistencia:** Basada en **Interfaces** (In-memory storage). El sistema está diseñado para ser extensible, permitiendo acoplar una base de datos real en el futuro sin afectar la lógica de negocio.
 
-### Ramas Principales
-* **`main`**: Contiene el código estable y listo para producción. Nadie comitea directamente acá.
-* **`develop`**: Es nuestra rama base de integración. Todo el código nuevo se fusiona acá antes de pasar a `main`.
+## Características
+* **Registro de usuarios:** Gestión de socios de la biblioteca.
+* **Préstamos:** Sistema de salida y entrada de ejemplares.
+* **Cálculo de multas:** Lógica automática para determinar sanciones por devoluciones tardías.
+* **Gestión de Catálogo:** Alta, baja y consulta de libros.
 
-### Guía paso a paso para desarrollar
+## Requisitos Previos
+* **.NET SDK 10.0** o superior.
 
-**1. Sincronizar el entorno local**
-Antes de tocar cualquier cosa, asegurate de tener la última versión de la rama de integración.
-```bash
-git checkout develop
-git pull origin develop
+## Instalación y Ejecución
+
+1. **Clona el repositorio:**
+   ```bash
+   git clone [https://github.com/AAAActis/LibraryProject.git](https://github.com/AAAActis/LibraryProject.git)
+2. **Navega al directorio del proyecto**
+   ```bash
+   cd LibraryProject 
+3. **Restaurar dependencias**
+   ```bash
+   dotnet restore 
+4. **Ejecturar la aplicacion**
+   ```bash
+   dotnet run
