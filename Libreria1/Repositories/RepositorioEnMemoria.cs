@@ -5,7 +5,7 @@ using Libreria1.Interfaces;
 
 namespace Libreria1.Repositories
 {
-    public class RepositorioEnMemoria<T> : IRepositorio<T> where T : IEntidad
+    public class RepositorioEnMemoria<T> : IRepositorio<T> where T : IEntidad<Guid>
     {
         // Acá centralizamos el almacenamiento temporal
         private readonly List<T> _datos = new List<T>();
