@@ -1,3 +1,5 @@
+using Libreria1.Application.Interfaces;
+namespace Libreria1.Domain.Entities;
 public class Prestamo : IEntidad<Guid>
 {
     public Guid Id {get; private set;} = Guid.NewGuid();

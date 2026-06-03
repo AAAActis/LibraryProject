@@ -1,4 +1,10 @@
 //Responsabilidad unica: Representar un libro en el sistema de biblioteca.
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Libreria1.Application.Interfaces;
+
+namespace Libreria1.Domain.Entities;
 public class Libro : IEntidad<Guid>
 {
     public Guid Id {get; private set;} = Guid.NewGuid();
