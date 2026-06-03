@@ -17,7 +17,7 @@ public class CrearUsuarioDto
     /// Correo electrónico del usuario.
     /// </summary>
     /// <example>juan.perez@example.com</example>
-    public string? Correo { get; set; }
+    public string? Email { get; set; }
     /// <summary>
     /// Número de teléfono del usuario.
     /// </summary>
