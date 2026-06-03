@@ -1,4 +1,5 @@
-namespace Libreria1.Interfaces
+using Libreria1.Domain.Entities;
+namespace Libreria1.Application.Interfaces
 {
     public interface IUsuarios
     {

@@ -1,4 +1,7 @@
-using System;
+using System;  
+using System.Collections.Generic;
+using Libreria1.Domain.Entities;
+namespace Libreria1.Application.Interfaces;
 public interface IServicioMulta
 {
     //Calcula la multa basada en la fecha de devolución y la fecha de préstamo.

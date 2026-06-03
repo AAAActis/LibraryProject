@@ -1,4 +1,6 @@
 //Responsabilidad unica: Representar un usuario en el sistema de biblioteca.
+using Libreria1.Application.Interfaces;
+namespace Libreria1.Domain.Entities;
 public class Usuario : IEntidad<Guid>
 {
     private static int _contador = 1;
