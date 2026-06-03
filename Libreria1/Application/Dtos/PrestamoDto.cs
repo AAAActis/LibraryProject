@@ -7,18 +7,27 @@ public class PrestamoDto
     /// Identificador único del préstamo.
     /// </summary>
     public Guid Id { get; set; }
+
     /// <summary>
     /// ISBN del libro prestado.
     /// </summary>
-    public string? LibroIsbn { get; set; }
+    public string LibroIsbn { get; set; }
+
     /// <summary>
     /// Identificador del usuario que realiza el préstamo.
     /// </summary>
-    public string? UsuarioId { get; set; }
+    public Guid UsuarioId { get; set; }
+
     /// <summary>
     /// Fecha en la que se realiza el préstamo.
     /// </summary>
     public DateTime FechaPrestamo { get; set; }
+
+    /// <summary>
+    /// Fecha en la que se debe devolver el libro.
+    /// </summary>
+    public DateTime FechaDevolucion { get; set; }
+
     /// <summary>
     /// Indica si el préstamo está activo.
     /// </summary>
