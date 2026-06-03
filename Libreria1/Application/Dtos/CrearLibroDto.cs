@@ -1,3 +1,4 @@
+namespace Libreria1.Application.DTOs;
 public class CrearLibroDto
 {
     public string? ISBN { get; set; }
