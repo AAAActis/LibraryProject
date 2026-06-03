@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Libreria1.Interfaces;
+using Libreria1.Domain.Entities;
+using Libreria1.Application.Interfaces;
 
 public class ServicioPrestamo
 {

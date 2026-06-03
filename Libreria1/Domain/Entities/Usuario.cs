@@ -7,16 +7,18 @@ public class Usuario : IEntidad<Guid>
     public Guid Id { get; private set; } = Guid.NewGuid();
     public int NroSocio {get; private set;}
     public string Nombre {get; private set;}
+    public string Apellido {get; private set;}
     public string Email {get; private set;}
     public DateTime FechaRegistro {get; private set;}
 
 
-    public Usuario(string nombre, string correoElectronico)
+    public Usuario(string nombre, string apellido, string email)
     {
         Id = Guid.NewGuid();
         NroSocio = _contador++;
         Nombre = nombre;
-        Email = correoElectronico;
+        Apellido = apellido;
+        Email = email;
         FechaRegistro = DateTime.Now;
     }
 }
