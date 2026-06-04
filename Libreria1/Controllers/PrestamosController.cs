@@ -30,11 +30,11 @@ namespace Libreria1.Controllers
 
             var prestamosDto = prestamos.Select(p => new PrestamoDto
             {
-                TituloLibro = p.LibroPrestado.Titulo,
-                NombreUsuario = p.UsuarioAsignado.Nombre,
+                LibroIsbn = p.LibroPrestado.Isbn,
+                NroSocio = p.UsuarioAsignado.NroSocio,
                 FechaPrestamo = p.FechaPrestamo,
                 FechaDevolucion = p.FechaDevolucion,
-                Activo = p.Activo
+                EstaActivo = p.Activo
             }).ToList();
 
             return Ok(prestamosDto); // http 200 con la lista limpia
@@ -46,7 +46,7 @@ namespace Libreria1.Controllers
         {
             try
             {
-                _servicioPrestamo.PrestarLibro(dto.NroSocio, dto.IsbnLibro); 
+                _servicioPrestamo.PrestarLibro(dto.NroSocio, dto.LibroIsbn); 
 
                 // devolvemos un 201 Created y redirigimos a la ruta del socio
                 return CreatedAtAction(nameof(ListarPorSocio), new { nroSocio = dto.NroSocio }, new { mensaje = "Préstamo registrado exitosamente." }); 
