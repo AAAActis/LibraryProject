@@ -8,5 +8,5 @@ public interface IServicioMulta
     Multa CalcularMulta(Prestamo prestamo);
     
     //Aplica la multa al usuario correspondiente.
-    List<Multa> ObtenerMultasPorUsuario(Usuario usuario);
+    List<Multa> ObtenerMultasPorUsuario(int nroSocio);
 }
