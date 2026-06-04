@@ -7,11 +7,11 @@ using Libreria1.Application.Interfaces;
 namespace Libreria1.Domain.Entities;
 public class Libro : IEntidad<Guid>
 {
-    public Guid Id {get; private set;} = Guid.NewGuid();
+    public Guid Id { get; private set; } = Guid.NewGuid();
     public string Isbn {get; private set;}
     public string Titulo {get; private set;}
     public string Autor {get; private set;}
-    public bool EstaDisponible {get; private set;} 
+    public bool EstaDisponible {get; private set;}
 
 
     public Libro(string isbn, string titulo, string autor)

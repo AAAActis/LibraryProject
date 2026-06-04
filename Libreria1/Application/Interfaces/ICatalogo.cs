@@ -9,5 +9,6 @@ namespace Libreria1.Interfaces
         List<Libro> BuscarLibrosPorTitulo(string titulo);
         List<Libro> BuscarLibrosPorAutor(string autor);
         List<Libro> ListarTodos();
+        void EliminarLibro(string isbn);
     }
 }
