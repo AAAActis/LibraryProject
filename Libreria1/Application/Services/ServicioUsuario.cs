@@ -2,8 +2,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Libreria1.Interfaces;
+using Libreria1.Domain.Entities;
+using Libreria1.Application.Interfaces;
+using Libreria1.Domain.Exceptions;
 
-public class ServicioUsuario : IUsuarios
+namespace Libreria1.Application.Services
+{
+    public class ServicioUsuario : IUsuarios
 {
     private readonly IRepositorio<Usuario> _repositorio;
 
@@ -12,9 +17,16 @@ public class ServicioUsuario : IUsuarios
         _repositorio = repositorio;
     }
 
-    public Usuario RegistrarUsuario(string nombre, string email)
+    public Usuario RegistrarUsuario(string nombre, string apellido, string email)
     {
-        var nuevoUsuario = new Usuario(nombre, email);
+        //verificar si email existe
+        var existeEmail = _repositorio.ObtenerTodos()
+            .Any(u => u.Email == email);
+        if (existeEmail)
+        {
+            throw new UsuarioYaExisteException($"El email {email} ya está registrado.");
+        }
+        var nuevoUsuario = new Usuario(nombre, apellido, email);
         _repositorio.Agregar(nuevoUsuario);
         return nuevoUsuario;
     }
@@ -46,4 +58,5 @@ public class ServicioUsuario : IUsuarios
         _repositorio.Eliminar(id);
         return true;
     }
+}
 }

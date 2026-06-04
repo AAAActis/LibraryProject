@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Libreria1.Interfaces;
+using Libreria1.Application.Interfaces;
 
 namespace Libreria1.Repositories
 {
