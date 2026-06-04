@@ -14,9 +14,9 @@ public class PrestamoDto
     public string LibroIsbn { get; set; }
 
     /// <summary>
-    /// Identificador del usuario que realiza el préstamo.
+    /// Número de socio del usuario que realiza el préstamo.
     /// </summary>
-    public Guid UsuarioId { get; set; }
+    public int NroSocio { get; set; }
 
     /// <summary>
     /// Fecha en la que se realiza el préstamo.
