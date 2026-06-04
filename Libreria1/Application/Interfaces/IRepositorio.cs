@@ -1,4 +1,8 @@
-namespace Libreria1.Interfaces
+using System;
+using System.Collections.Generic;
+using Libreria1.Domain.Entities;  
+using Libreria1.Application.Interfaces;  
+
 {
     public interface IRepositorio<T> where T : IEntidad<Guid>
     {
