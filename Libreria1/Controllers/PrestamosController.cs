@@ -10,10 +10,12 @@ namespace Libreria1.Controllers
     public class PrestamosController : ControllerBase
     {
         private readonly ServicioPrestamo _servicioPrestamo;
+        private readonly ServicioMultas _servicioMulta;
 
-        public PrestamosController(ServicioPrestamo servicioPrestamo)
+        public PrestamosController(ServicioPrestamo servicioPrestamo, ServicioMultas servicioMulta)
         {
             _servicioPrestamo = servicioPrestamo;
+            _servicioMulta = servicioMulta;
         }
 
         // GET: api/prestamos/usuario/{nroSocio}
@@ -69,22 +71,80 @@ namespace Libreria1.Controllers
             }
         }
 
-        [HttpPut("{nroSocio}/devolver")]
-        public ActionResult<PrestamoDto> Devolver(int nroSocio, string isbnLibro)
+        [HttpPut("devolver")]
+        public ActionResult Devolver([FromBody] CrearPrestamoDto dto)
         {
             try
             {
-                _servicioPrestamo.DevolverLibro(nroSocio, isbnLibro);
-                return Ok(new { mensaje = "Libro devuelto exitosamente." }); // el famoso 200
-            }
-            catch (PrestamoNoEncontradoException ex)
+                var prestamoActualizado = _servicioPrestamo.DevolverLibro(dto.UsuarioId, dto.LibroIsbn);
+
+                var prestamoDto = new PrestamoDto
+                {
+                    LibroIsbn = prestamoActualizado.LibroPrestado.Isbn,
+                    NroSocio = prestamoActualizado.UsuarioAsignado.NroSocio,
+                    FechaPrestamo = prestamoActualizado.FechaPrestamo,
+                    FechaDevolucion = prestamoActualizado.FechaDevolucion,
+                    EstaActivo = prestamoActualizado.Activo
+                }; 
+
+                // 3. Revisamos si el servicio generó una multa para este préstamo
+        var multa = _servicioMulta.ObtenerMultaPorPrestamo(prestamoActualizado.Id); 
+
+        if (multa != null)
+        {
+            var multaDto = new MultaDto
             {
-                return NotFound(new { mensaje = ex.Message });   // este es el famoso 404 
-            }
-            catch (PrestamoYaDevueltoEx ex)
-            {
-                return BadRequest(new { mensaje = ex.Message }); // el famoso 400  
-            }
+                DiasRetraso = multa.DiasRetraso,
+                MontoTotal = multa.MontoMulta
+            };
+            
+            // Requerimiento: "si hay retraso, retornar la multa en el body" junto con el préstamo
+            return Ok(new { prestamo = prestamoDto, multa = multaDto });
         }
+
+        // Si no hay multa, devolvemos solo el préstamo actualizado
+        return Ok(new { prestamo = prestamoDto }); 
+    }
+    catch (PrestamoNoEncontradoException ex)
+    {
+        return NotFound(new { mensaje = ex.Message }); // 404
+    }
+    catch (PrestamoYaDevueltoEx ex)
+    {
+        return BadRequest(new { mensaje = ex.Message }); // 400
+    }
+}
+                
+
+        [HttpGet("usuario/{nroSocio}/libro/{isbnLibro}/multa")]
+public ActionResult<MultaDto> ConsultarMulta(int nroSocio, string isbnLibro)
+{
+    try
+    {
+        var prestamo = _servicioPrestamo.ObtenerPrestamoEspecifico(nroSocio, isbnLibro);
+        
+        var multa = _servicioMulta.CalcularMulta(prestamo); // Suponiendo que esto lanza excepción si no está vencido
+
+        var multaDto = new MultaDto
+        {
+            DiasRetraso = multa.DiasRetraso,
+            MontoTotal = multa.MontoMulta,
+            FechaGenerada = multa.FechaGenerada
+        };
+
+        // 200 con MultaDto
+        return Ok(multaDto); 
+    }
+    catch (PrestamoNoEncontradoException ex)
+    {
+        return NotFound(new { mensaje = ex.Message }); // 404
+    }
+    catch (PrestamoNoVencidoEx ex)
+    {
+        // 400 
+        return BadRequest(new { mensaje = ex.Message }); 
+    }
+}
+
     }
 }
