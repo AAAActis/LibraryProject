@@ -68,5 +68,23 @@ namespace Libreria1.Controllers
                 return NotFound(new { mensaje = ex.Message }); // 404
             }
         }
+
+        [HttpPut("{nroSocio}/devolver")]
+        public ActionResult<PrestamoDto> Devolver(int nroSocio, string isbnLibro)
+        {
+            try
+            {
+                _servicioPrestamo.DevolverLibro(nroSocio, isbnLibro);
+                return Ok(new { mensaje = "Libro devuelto exitosamente." }); // el famoso 200
+            }
+            catch (PrestamoNoEncontradoException ex)
+            {
+                return NotFound(new { mensaje = ex.Message });   // este es el famoso 404 
+            }
+            catch (PrestamoYaDevueltoEx ex)
+            {
+                return BadRequest(new { mensaje = ex.Message }); // el famoso 400  
+            }
+        }
     }
 }
