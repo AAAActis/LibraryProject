@@ -23,6 +23,7 @@ namespace Libreria1.Controllers
 
         // GET /api/libros
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<LibroDto>), StatusCodes.Status200OK)]
         public IActionResult ObtenerTodos()
         {
             
@@ -43,6 +44,8 @@ namespace Libreria1.Controllers
 
         // GET /api/libros/{isbn}
         [HttpGet("{isbn}")]
+        [ProducesResponseType(typeof(LibroDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult ObtenerPorIsbn(string isbn)
         {
 
@@ -68,6 +71,9 @@ namespace Libreria1.Controllers
 
         // POST /api/libros
         [HttpPost]
+        [ProducesResponseType(typeof(LibroDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult CrearLibro([FromBody] CrearLibroDto dto)
         {
 
@@ -98,6 +104,9 @@ namespace Libreria1.Controllers
 
         // DELETE /api/libros/{isbn}
         [HttpDelete("{isbn}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult EliminarLibro(string isbn)
         {
 
@@ -120,12 +129,12 @@ namespace Libreria1.Controllers
             switch (ex)
             {
                 case LibroNoEncontradoException e:
-                    return NotFound(new { mensaje = e.Message });
+                    return NotFound(new { mensaje = e.Message }); // 404
 
                 case LibroNoDisponibleException e:
-                    return Conflict(new { mensaje = e.Message });
+                    return Conflict(new { mensaje = e.Message }); // 409
                 default:
-                    return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = "Ocurrió un error inesperado en el servidor." });
+                    return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = "Ocurrió un error inesperado en el servidor." }); // 500
             }       
         }
     }

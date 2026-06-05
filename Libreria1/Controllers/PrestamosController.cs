@@ -20,6 +20,8 @@ namespace Libreria1.Controllers
 
         // GET: api/prestamos/usuario/{nroSocio}
         [HttpGet("usuario/{nroSocio}")]
+        [ProducesResponseType(typeof(List<PrestamoDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<List<PrestamoDto>> ListarPorSocio(int nroSocio)
         {
             // buscar los prestamos del socio
@@ -44,6 +46,10 @@ namespace Libreria1.Controllers
 
         // POST: api/prestamos
         [HttpPost]
+        [ProducesResponseType(typeof(PrestamoDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public ActionResult Crear([FromBody] PrestamoDto dto)
         {
 
@@ -55,6 +61,9 @@ namespace Libreria1.Controllers
         }
 
         [HttpPut("devolver")]
+        [ProducesResponseType(typeof(PrestamoDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult Devolver([FromBody] CrearPrestamoDto dto)
         {
 
@@ -91,6 +100,9 @@ namespace Libreria1.Controllers
                 
 
         [HttpGet("usuario/{nroSocio}/libro/{isbnLibro}/multa")]
+        [ProducesResponseType(typeof(MultaDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 public ActionResult<MultaDto> ConsultarMulta(int nroSocio, string isbnLibro)
 {
 
