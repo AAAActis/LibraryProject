@@ -4,6 +4,7 @@ using Libreria1.Services; // Ajustá los namespaces si difieren
 using Libreria1.Application.Services;
 using Libreria1.Domain.Entities;
 using Libreria1.Application.Interfaces;
+using Microsoft.OpenApi;
 using Libreria1.Application.DTOs;
 using Libreria1.API.Controllers;
 
@@ -24,7 +25,32 @@ builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
 
+
+builder.Services.AddSwaggerGen(opciones =>
+{
+    opciones.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Librería API",
+        Description = "API para gestionar una librería, incluyendo libros, usuarios, préstamos y multas."
+        
+        
+    });
+
+    // 1. Calculamos el nombre del archivo XML que se generó
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+    // 2. Armamos la ruta completa de dónde está guardado en tu PC
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+    // 3. Le decimos a Swagger que lo incluya en la página web
+    opciones.IncludeXmlComments(xmlPath);
+
+}); // Agrega Swagger para documentación de la API
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // 4. Conectar las rutas URL con los controladores
 app.MapControllers();

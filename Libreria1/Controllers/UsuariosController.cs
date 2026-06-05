@@ -19,6 +19,7 @@ namespace Libreria1.API.Controllers
 
         // GET api/usuarios
         [HttpGet]
+        [ProducesResponseType(typeof(List<UsuarioDto>), StatusCodes.Status200OK)]
         public ActionResult<List<UsuarioDto>> ObtenerTodos()
         {
             var usuarios = _servicioUsuario.ListarUsuarios();
@@ -34,6 +35,8 @@ namespace Libreria1.API.Controllers
 
         // GET api/usuarios/{id}
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UsuarioDto> ObtenerPorId(Guid id)
         {
             var usuario = _servicioUsuario.BuscarPorId(id);
@@ -52,6 +55,9 @@ namespace Libreria1.API.Controllers
 
         // POST api/usuarios
         [HttpPost]
+        [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public ActionResult<UsuarioDto> Crear([FromBody] CrearUsuarioDto dto)
         {
             try
