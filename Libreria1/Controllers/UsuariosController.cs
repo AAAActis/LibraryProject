@@ -54,8 +54,7 @@ namespace Libreria1.API.Controllers
         [HttpPost]
         public ActionResult<UsuarioDto> Crear([FromBody] CrearUsuarioDto dto)
         {
-            try
-            {
+
                 var usuario = _servicioUsuario.RegistrarUsuario(
                     dto.Nombre, dto.Apellido, dto.Email
                 );
@@ -67,11 +66,6 @@ namespace Libreria1.API.Controllers
                     Email = usuario.Email
                 };
                 return CreatedAtAction(nameof(ObtenerPorId), new { id = usuario.Id }, usuarioDto);
-            }
-            catch (UsuarioYaExisteException ex)
-            {
-                return Conflict(new { mensaje = ex.Message });
-            }
         }
     }
 }

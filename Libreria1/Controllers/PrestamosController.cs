@@ -46,36 +46,18 @@ namespace Libreria1.Controllers
         [HttpPost]
         public ActionResult Crear([FromBody] PrestamoDto dto)
         {
-            try
-            {
+
                 _servicioPrestamo.PrestarLibro(dto.NroSocio, dto.LibroIsbn); 
 
                 // devolvemos un 201 Created y redirigimos a la ruta del socio
                 return CreatedAtAction(nameof(ListarPorSocio), new { nroSocio = dto.NroSocio }, new { mensaje = "Préstamo registrado exitosamente." }); 
-            }
-            catch (LibroNoDisponibleException ex)
-            {
-                return Conflict(new { mensaje = ex.Message }); // 409
-            }
-            catch (LimitePrestamosAlcanzadoException ex)
-            {
-                return Conflict(new { mensaje = ex.Message }); // 409
-            }
-            catch (LibroNoEncontradoException ex)
-            {
-                return NotFound(new { mensaje = ex.Message }); // 404
-            }
-            catch (UsuarioNoEncontradoException ex)
-            {
-                return NotFound(new { mensaje = ex.Message }); // 404
-            }
+
         }
 
         [HttpPut("devolver")]
         public ActionResult Devolver([FromBody] CrearPrestamoDto dto)
         {
-            try
-            {
+
                 var prestamoActualizado = _servicioPrestamo.DevolverLibro(dto.UsuarioId, dto.LibroIsbn);
 
                 var prestamoDto = new PrestamoDto
@@ -104,23 +86,14 @@ namespace Libreria1.Controllers
 
         // Si no hay multa, devolvemos solo el préstamo actualizado
         return Ok(new { prestamo = prestamoDto }); 
-    }
-    catch (PrestamoNoEncontradoException ex)
-    {
-        return NotFound(new { mensaje = ex.Message }); // 404
-    }
-    catch (PrestamoYaDevueltoEx ex)
-    {
-        return BadRequest(new { mensaje = ex.Message }); // 400
-    }
+    
 }
                 
 
         [HttpGet("usuario/{nroSocio}/libro/{isbnLibro}/multa")]
 public ActionResult<MultaDto> ConsultarMulta(int nroSocio, string isbnLibro)
 {
-    try
-    {
+
         var prestamo = _servicioPrestamo.ObtenerPrestamoEspecifico(nroSocio, isbnLibro);
         
         var multa = _servicioMulta.CalcularMulta(prestamo); // Suponiendo que esto lanza excepción si no está vencido
@@ -134,16 +107,7 @@ public ActionResult<MultaDto> ConsultarMulta(int nroSocio, string isbnLibro)
 
         // 200 con MultaDto
         return Ok(multaDto); 
-    }
-    catch (PrestamoNoEncontradoException ex)
-    {
-        return NotFound(new { mensaje = ex.Message }); // 404
-    }
-    catch (PrestamoNoVencidoEx ex)
-    {
-        // 400 
-        return BadRequest(new { mensaje = ex.Message }); 
-    }
+
 }
 
     }

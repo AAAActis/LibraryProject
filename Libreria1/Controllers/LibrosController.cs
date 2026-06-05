@@ -25,8 +25,7 @@ namespace Libreria1.Controllers
         [HttpGet]
         public IActionResult ObtenerTodos()
         {
-            try
-            {
+            
                 var libros = _catalogo.ListarTodos();
 
                 // Mapeo de Entidades de Dominio a DTOs de lectura
@@ -39,19 +38,14 @@ namespace Libreria1.Controllers
                 }).ToList();
 
                 return Ok(librosDto);
-            }
-            catch (Exception ex)
-            {
-                return MapearExcepcion(ex);
-            }
+        
         }
 
         // GET /api/libros/{isbn}
         [HttpGet("{isbn}")]
         public IActionResult ObtenerPorIsbn(string isbn)
         {
-            try
-            {
+
                 var libro = _catalogo.BuscarLibroPorIsbn(isbn);
 
                 if (libro == null)
@@ -68,19 +62,15 @@ namespace Libreria1.Controllers
                 };
 
                 return Ok(libroDto);
-            }
-            catch (Exception ex)
-            {
-                return MapearExcepcion(ex);
-            }
+            
+
         }
 
         // POST /api/libros
         [HttpPost]
         public IActionResult CrearLibro([FromBody] CrearLibroDto dto)
         {
-            try
-            {
+
                 // Validación de duplicados
                 var libroExistente = _catalogo.BuscarLibroPorIsbn(dto.ISBN);
                 if (libroExistente != null)
@@ -103,19 +93,14 @@ namespace Libreria1.Controllers
 
                 // Retorna 201 Created con Location Header apuntando al GET por ISBN
                 return CreatedAtAction(nameof(ObtenerPorIsbn), new { isbn = libroDto.Isbn }, libroDto);
-            }
-            catch (Exception ex)
-            {
-                return MapearExcepcion(ex);
-            }
+            
         }
 
         // DELETE /api/libros/{isbn}
         [HttpDelete("{isbn}")]
         public IActionResult EliminarLibro(string isbn)
         {
-            try
-            {
+
                 var libro = _catalogo.BuscarLibroPorIsbn(isbn);
                 if (libro == null)
                 {
@@ -126,11 +111,7 @@ namespace Libreria1.Controllers
                 
                 // 204 No Content para eliminaciones exitosas sin cuerpo de respuesta
                 return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return MapearExcepcion(ex);
-            }
+
         }
 
         // Metodo privado para centralizar y mapear excepciones a respuestas HTTP concretas

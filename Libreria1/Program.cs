@@ -9,6 +9,13 @@ using Libreria1.API.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var app = builder.Build();
+
+
+//se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
+app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
+
+
 // 1. Habilitar controladores
 builder.Services.AddControllers();
 
@@ -24,7 +31,6 @@ builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
 
-var app = builder.Build();
 
 // 4. Conectar las rutas URL con los controladores
 app.MapControllers();
