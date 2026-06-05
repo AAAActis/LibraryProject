@@ -1,4 +1,4 @@
-﻿using Libreria1.Interfaces;
+using Libreria1.Interfaces;
 using Libreria1.Repositories;
 using Libreria1.Services; // Ajustá los namespaces si difieren
 using Libreria1.Application.Services;
@@ -9,6 +9,13 @@ using Libreria1.Application.DTOs;
 using Libreria1.API.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var app = builder.Build();
+
+
+//se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
+app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
+
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
