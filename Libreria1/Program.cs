@@ -33,7 +33,19 @@ builder.Services.AddSwaggerGen(opciones =>
         Version = "v1",
         Title = "Librería API",
         Description = "API para gestionar una librería, incluyendo libros, usuarios, préstamos y multas."
-    });   
+        
+        
+    });
+
+    // 1. Calculamos el nombre del archivo XML que se generó
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+    // 2. Armamos la ruta completa de dónde está guardado en tu PC
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+    // 3. Le decimos a Swagger que lo incluya en la página web
+    opciones.IncludeXmlComments(xmlPath);
+
 }); // Agrega Swagger para documentación de la API
 var app = builder.Build();
 
