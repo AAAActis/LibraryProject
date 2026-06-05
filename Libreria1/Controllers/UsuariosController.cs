@@ -19,6 +19,7 @@ namespace Libreria1.API.Controllers
 
         // GET api/usuarios
         [HttpGet]
+        
         public ActionResult<List<UsuarioDto>> ObtenerTodos()
         {
             var usuarios = _servicioUsuario.ListarUsuarios();
