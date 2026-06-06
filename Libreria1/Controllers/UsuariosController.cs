@@ -53,6 +53,31 @@ namespace Libreria1.API.Controllers
             return Ok(dto);
         }
 
+    
+    //GET api/usuarios/usuarios/{nroSocio}
+        [HttpGet("socio/{nroSocio}")]
+        [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<UsuarioDto> ObtenerPorNroSocio(int nroSocio)
+        {
+            try
+            {
+                var usuario = _servicioUsuario.BuscarPorNumeroSocio(nroSocio);
+                var dto = new UsuarioDto
+                {
+                    Id = usuario.Id,
+                    Nombre = usuario.Nombre,
+                    Apellido = usuario.Apellido,
+                    Email = usuario.Email
+                };
+                return Ok(dto);
+            }
+            catch (UsuarioNoEncontradoException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         // POST api/usuarios
         [HttpPost]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
