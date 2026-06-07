@@ -42,7 +42,7 @@ public class ExceptionHandlerMiddLeware
 
         var apiError = new ApiError
         {
-            StatusCode = statusCode,
+            statusCode = statusCode,
             Mensaje = mensaje
         };
 
