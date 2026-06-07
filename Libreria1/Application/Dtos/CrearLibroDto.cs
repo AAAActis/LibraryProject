@@ -5,6 +5,7 @@ public class CrearLibroDto
 {
     [Required(ErrorMessage = "El ISBN es obligatorio.")]
     public string? ISBN { get; set; }
+    [Required]
     [StringLength(100, ErrorMessage = "El título no puede exceder los 100 caracteres.")]
     public string? Titulo { get; set; }
     [Required(ErrorMessage = "El autor es obligatorio.")]
