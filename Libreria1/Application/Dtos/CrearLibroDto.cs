@@ -1,6 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Libreria1.Application.DTOs;
+
+/// <summary>
+/// DTO para crear un nuevo libro.
+/// </summary>
 public class CrearLibroDto
 {
     [Required(ErrorMessage = "El ISBN es obligatorio.")]

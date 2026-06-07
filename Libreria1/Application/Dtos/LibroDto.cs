@@ -1,4 +1,7 @@
 namespace Libreria1.Application.DTOs;
+/// <summary>
+/// DTO para representar un libro.
+/// </summary>
 public class LibroDto
 {
     public string? Isbn { get; set; }
