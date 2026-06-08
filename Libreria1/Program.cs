@@ -10,12 +10,6 @@ using Libreria1.API.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
-
-
-//se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
-app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
-
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
@@ -55,6 +49,10 @@ builder.Services.AddSwaggerGen(opciones =>
 
 }); // Agrega Swagger para documentación de la API
 var app = builder.Build();
+
+
+//se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
+app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
