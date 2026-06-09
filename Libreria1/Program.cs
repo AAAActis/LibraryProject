@@ -1,3 +1,4 @@
+using System;
 using Libreria1.Interfaces;
 using Libreria1.Repositories;
 using Libreria1.Services; // Ajustá los namespaces si difieren
@@ -7,6 +8,7 @@ using Libreria1.Application.Interfaces;
 using Microsoft.OpenApi;
 using Libreria1.Application.DTOs;
 using Libreria1.API.Controllers;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,25 @@ builder.Services.AddSwaggerGen(opciones =>
 
 }); // Agrega Swagger para documentación de la API
 var app = builder.Build();
+
+
+/*INICIO DEL TEST DE CONEXIÓN A POSTGRESQL(Se comenta porque se realizo para una prueba puntual y no es necesario que se ejecute cada vez que se inicia la API)
+var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
+
+using (var connection = new NpgsqlConnection(connectionString))
+{
+    try
+    {
+        Console.WriteLine("Intentando conectar a la base de datos...");
+        connection.Open(); // Si las credenciales o el puerto estan mal, esto lanza una excepción
+        Console.WriteLine("La API se conectó a PostgreSQL correctamente.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"ERROR DE CONEXIÓN: {ex.Message}");
+    }
+}
+*/
 
 
 //se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
