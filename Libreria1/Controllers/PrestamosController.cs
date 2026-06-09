@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Libreria1.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreria1.Controllers

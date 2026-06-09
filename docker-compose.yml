@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # 1. El servicio de Base de Datos (esto es lo que armo santi, contraseña, usuario, nombre de la base de datos)
+  postgres:
+    image: postgres:16
+    container_name: libreria-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: libreria
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Aquí ocurre la magia de la persistencia
+    restart: unless-stopped
+
+  # 2. El servicio de Interfaz Web para administrar la base de datos
+  adminer:
+    image: adminer
+    container_name: libreria-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres # Le dice a Docker que levante Postgres primero
+    restart: unless-stopped
+
+# 3. Declaración del volumen para que los datos no se borren al apagar la PC
+volumes:
+  pgdata:
