@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Libreria1.Interfaces;
+using Libreria1.Domain.Entities;
+using Libreria1.Application.Interfaces;
 
 public class ServicioPrestamo
 {
@@ -49,7 +51,7 @@ public class ServicioPrestamo
     }
             
 
-    public void DevolverLibro(int nroSocio, string isbnLibro)
+    public Prestamo DevolverLibro(int nroSocio, string isbnLibro)
     {
         // validar que el prestamo pertenece al usuario
 
@@ -70,8 +72,20 @@ public class ServicioPrestamo
 
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
         libro.MarcarDevuelto();
+        return prestamo;
     }
 
+    public Prestamo ObtenerPrestamoEspecifico(int nroSocio, string isbnLibro)
+    {
+        var prestamo = repositorioPrestamos.ObtenerTodos()
+            .FirstOrDefault(p => p.UsuarioAsignado.NroSocio == nroSocio
+            && p.LibroPrestado.Isbn == isbnLibro);
+        if (prestamo == null)
+        {
+            throw new PrestamoNoEncontradoException();
+        }
+        return prestamo;
+    }
     public List<Prestamo> ListarPrestamosActivos()
     {
         return repositorioPrestamos.ObtenerTodos()

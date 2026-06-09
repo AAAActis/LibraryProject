@@ -1,9 +1,10 @@
-namespace Libreria1.Interfaces
+using Libreria1.Domain.Entities;
+namespace Libreria1.Application.Interfaces
 {
     public interface IUsuarios
     {
         // Registra un usuario y devuelve la entidad creada (con Id Guid y NroSocio asignado)
-        Usuario RegistrarUsuario(string nombre, string email);
+        Usuario RegistrarUsuario(string nombre, string apellido, string email);
 
         // Busca por número de socio (1,2,3...) y devuelve la entidad o lanza excepción si no existe
         Usuario BuscarPorNumeroSocio(int nroSocio);

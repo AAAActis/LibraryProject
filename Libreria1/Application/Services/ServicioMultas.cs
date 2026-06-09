@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Libreria1.Interfaces;
+using Libreria1.Domain.Entities;
+using Libreria1.Application.Interfaces;
 
 public class ServicioMultas : IServicioMulta
 {
@@ -30,11 +32,17 @@ public class ServicioMultas : IServicioMulta
         return null; // no hay multa si no hay retraso
     }
     
-    public List<Multa> ObtenerMultasPorUsuario(Usuario usuario)
+    public List<Multa> ObtenerMultasPorUsuario(int nroSocio)
     {
         return repositorioMultas.ObtenerTodos()
-        .Where(m => m.PrestamoAsignado.UsuarioAsignado.Id == usuario.Id)
+        .Where(m => m.PrestamoAsignado.UsuarioAsignado.NroSocio == nroSocio)
         .ToList();  
+    }
+
+    public Multa ObtenerMultaPorPrestamo(Guid prestamoId)
+    {
+        return repositorioMultas.ObtenerTodos()
+        .FirstOrDefault(m => m.PrestamoAsignado.Id == prestamoId);
     }
 
 }

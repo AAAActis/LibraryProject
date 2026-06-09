@@ -1,3 +1,5 @@
+using Libreria1.Application.Interfaces;
+namespace Libreria1.Domain.Entities;
 public class Multa : IEntidad<Guid>
 {
     /// Responsabilidad única: Representa una penalización económica por la devolución tardía de un préstamo y calcula su costo.

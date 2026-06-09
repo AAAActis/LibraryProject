@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using Libreria1.Interfaces;
+using Libreria1.Domain.Entities;
+using Libreria1.Repositories;
+using Libreria1.Application.Interfaces;
 
 namespace Libreria1.Services
 {
