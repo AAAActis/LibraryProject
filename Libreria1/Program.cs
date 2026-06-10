@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Libreria1.Interfaces;
 using Libreria1.Repositories;
 using Libreria1.Services; // Ajustá los namespaces si difieren
@@ -11,7 +11,7 @@ using Libreria1.API.Controllers;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var cadena = builder.Configuration.GetConnectionString("Libreria");
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
