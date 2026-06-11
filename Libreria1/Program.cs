@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Libreria1.Interfaces;
 using Libreria1.Repositories;
 using Libreria1.Services; // Ajustá los namespaces si difieren
@@ -11,14 +11,14 @@ using Libreria1.API.Controllers;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var cadena = builder.Configuration.GetConnectionString("Libreria");
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
 
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
-builder.Services.AddSingleton<IRepositorio<Libro>, RepositorioEnMemoria<Libro>>();
-builder.Services.AddSingleton<IRepositorio<Usuario>, RepositorioEnMemoria<Usuario>>();
+builder.Services.AddScoped<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
+builder.Services.AddScoped<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));
 builder.Services.AddSingleton<IRepositorio<Prestamo>, RepositorioEnMemoria<Prestamo>>();
 builder.Services.AddSingleton<IRepositorio<Multa>, RepositorioMultas>();
 
