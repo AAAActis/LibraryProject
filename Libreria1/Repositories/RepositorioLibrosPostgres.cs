@@ -5,7 +5,7 @@ using Libreria1.Domain.Entities;
 using Libreria1.Application.Interfaces;
 using Libreria1.Interfaces;
 
-namespace RepositorioLibrosPostgres
+namespace Libreria1.Repositories
 {
     public class RepositorioLibrosPostgres : IRepositorio<Libro>
     {
