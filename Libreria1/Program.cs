@@ -17,8 +17,8 @@ var cadena = builder.Configuration.GetConnectionString("Libreria");
 builder.Services.AddControllers();
 
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
-builder.Services.AddSingleton<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
-builder.Services.AddSingleton<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));
+builder.Services.AddScoped<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
+builder.Services.AddScoped<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));
 builder.Services.AddSingleton<IRepositorio<Prestamo>, RepositorioEnMemoria<Prestamo>>();
 builder.Services.AddSingleton<IRepositorio<Multa>, RepositorioMultas>();
 
