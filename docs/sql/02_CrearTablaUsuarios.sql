@@ -1,5 +1,5 @@
 --1 Creación de la estructura
-CREAR TABLE usuarios (
+CREATE TABLE usuarios (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nro_socio SERIAL NOT NULL UNIQUE,
     nombre VARCHAR(100) NOT NULL,
