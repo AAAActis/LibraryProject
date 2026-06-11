@@ -14,7 +14,7 @@ public class Prestamo : IEntidad<Guid>
     public string autor => LibroPrestado.Autor;
     public bool estaDisponible => LibroPrestado.EstaDisponible;
 
-/*
+
     public Prestamo(Libro libro, Usuario usuario)
     {
         Id = Guid.NewGuid();
@@ -25,7 +25,7 @@ public class Prestamo : IEntidad<Guid>
         Activo = true;
         LibroPrestado.MarcarPrestado();
     }
-    */
+    
 
     internal Prestamo(Guid id, Libro libro, Usuario usuario, DateTime fechaPrestamo, DateTime? fechaDevolucion, bool activo)
 {

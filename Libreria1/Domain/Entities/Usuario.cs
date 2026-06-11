@@ -10,7 +10,19 @@ public class Usuario : IEntidad<Guid>
     public string Apellido {get; private set;}
     public string Email {get; private set;}
     public DateTime FechaRegistro {get; private set;}
-
+    
+    public Usuario(string nombre, string apellido, string email)
+    {
+    Id = Guid.NewGuid(); // Se genera un ID nuevo
+    Nombre = nombre;
+    Apellido = apellido;
+    Email = email;
+    FechaRegistro = DateTime.Now; // Fecha actual
+    
+    // Acá le asignás el número de socio según la lógica que uses 
+    // (puede ser un Random, autoincremental en la BD, o empezar en 0)
+    NroSocio = 0; 
+    }   
 
     internal Usuario(Guid id, string nombre, int nroSocio, string apellido, string email, DateTime fechaRegistro)
     {
