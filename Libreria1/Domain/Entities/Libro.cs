@@ -11,7 +11,7 @@ public class Libro : IEntidad<Guid>
     public string Isbn {get; private set;}
     public string Titulo {get; private set;}
     public string Autor {get; private set;}
-    public bool EstaDisponible {get; private set;}
+    public bool EstaDisponible {get; set;}
 
 
     public Libro(string isbn, string titulo, string autor)
