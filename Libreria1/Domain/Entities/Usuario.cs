@@ -12,13 +12,13 @@ public class Usuario : IEntidad<Guid>
     public DateTime FechaRegistro {get; private set;}
 
 
-    public Usuario(string nombre, string apellido, string email)
+    internal Usuario(Guid id, string nombre, int nroSocio, string apellido, string email, DateTime fechaRegistro)
     {
-        Id = Guid.NewGuid();
-        NroSocio = _contador++;
+        Id = id;
         Nombre = nombre;
+        NroSocio = nroSocio;
         Apellido = apellido;
         Email = email;
-        FechaRegistro = DateTime.Now;
+        FechaRegistro = fechaRegistro;
     }
 }
