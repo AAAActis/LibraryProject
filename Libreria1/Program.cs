@@ -9,6 +9,7 @@ using Microsoft.OpenApi;
 using Libreria1.Application.DTOs;
 using Libreria1.API.Controllers;
 using Npgsql;
+using Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Habilitar controladores
 builder.Services.AddControllers();
 
+// Agregamos la cadena de conexión a tu Docker
+var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
-builder.Services.AddSingleton<IRepositorio<Libro>, RepositorioEnMemoria<Libro>>();
+// Cambiamos a Scoped y usamos el nuevo repositorio
+builder.Services.AddScoped<IRepositorio<Libro>>(provider => new RepositorioLibrosPostgres(connectionString));
 builder.Services.AddSingleton<IRepositorio<Usuario>, RepositorioEnMemoria<Usuario>>();
 builder.Services.AddSingleton<IRepositorio<Prestamo>, RepositorioEnMemoria<Prestamo>>();
 builder.Services.AddSingleton<IRepositorio<Multa>, RepositorioMultas>();

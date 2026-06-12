@@ -5,7 +5,7 @@ using Libreria1.Domain.Entities;
 using Libreria1.Application.Interfaces;
 using Libreria1.Interfaces;
 
-namespace RepositorioLibrosPostgres
+namespace Repositories
 {
     public class RepositorioLibrosPostgres : IRepositorio<Libro>
     {
@@ -20,7 +20,7 @@ namespace RepositorioLibrosPostgres
         IEnumerable<Libro> IRepositorio<Libro>.ObtenerTodos()
         {
             var libros = new List<Libro>();
-            const string query = "SELECT isbn, titulo, autor, estaDisponible FROM libros";
+            const string query = "SELECT isbn, titulo, autor, esta_disponible FROM libros";
             using var connection = new NpgsqlConnection(_connectionString);
             using var command = new NpgsqlCommand(query, connection);
 

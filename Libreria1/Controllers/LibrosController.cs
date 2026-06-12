@@ -76,14 +76,19 @@ namespace Libreria1.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult CrearLibro([FromBody] CrearLibroDto dto)
         {
-
-                // Validación de duplicados
+            //Intentamos buscar si ya existe
+            try
+            {
                 var libroExistente = _catalogo.BuscarLibroPorIsbn(dto.ISBN);
-                if (libroExistente != null)
-                {
-                    return Conflict(new { mensaje = $"El libro con ISBN {dto.ISBN} ya existe en el sistema." });
-                }
-
+                
+                // Si la línea de arriba no lanzó excepción, significa que el libro SÍ EXISTE.
+                // Como es un POST (Crear), esto es un conflicto.
+                return Conflict(new { mensaje = $"El libro con ISBN {dto.ISBN} ya existe en el sistema." });
+            }
+            catch (LibroNoEncontradoException)
+            {
+                // Si lanzó la excepción, significa que NO EXISTE. 
+                
                 // Instancia del Dominio
                 var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor);
                 _catalogo.AgregarLibro(nuevoLibro);
@@ -99,7 +104,7 @@ namespace Libreria1.Controllers
 
                 // Retorna 201 Created con Location Header apuntando al GET por ISBN
                 return CreatedAtAction(nameof(ObtenerPorIsbn), new { isbn = libroDto.Isbn }, libroDto);
-            
+            }
         }
 
         // DELETE /api/libros/{isbn}
