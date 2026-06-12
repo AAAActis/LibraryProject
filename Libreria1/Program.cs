@@ -12,7 +12,7 @@ using Npgsql;
 using Libreria1;
 
 var builder = WebApplication.CreateBuilder(args);
-var cadena = builder.Configuration.GetConnectionString("Libreria");
+var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
