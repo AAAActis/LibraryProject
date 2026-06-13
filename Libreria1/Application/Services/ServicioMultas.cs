@@ -7,11 +7,11 @@ using Libreria1.Application.Interfaces;
 
 public class ServicioMultas : IServicioMulta
 {
-    private readonly IRepositorio<Multa> repositorioMultas;
+    private readonly IRepositorio<Multa, Guid> _repositorioMultas;
 
-    public ServicioMultas(IRepositorio<Multa> repositorioMultas)
+public ServicioMultas(IRepositorio<Multa, Guid> repositorioMultas)
     {
-        this.repositorioMultas = repositorioMultas;
+        this._repositorioMultas = repositorioMultas;
     }
 
     public Multa CalcularMulta (Prestamo prestamo)
@@ -26,7 +26,7 @@ public class ServicioMultas : IServicioMulta
         if (diasRetraso > 0)
         {
             var multa = new Multa(prestamo, diasRetraso);
-            repositorioMultas.Agregar(multa);
+            _repositorioMultas.Agregar(multa);
             return multa;
         }
         return null; // no hay multa si no hay retraso
@@ -34,14 +34,14 @@ public class ServicioMultas : IServicioMulta
     
     public List<Multa> ObtenerMultasPorUsuario(int nroSocio)
     {
-        return repositorioMultas.ObtenerTodos()
+        return _repositorioMultas.ObtenerTodos()
         .Where(m => m.PrestamoAsignado.UsuarioAsignado.NroSocio == nroSocio)
         .ToList();  
     }
 
     public Multa ObtenerMultaPorPrestamo(Guid prestamoId)
     {
-        return repositorioMultas.ObtenerTodos()
+        return _repositorioMultas.ObtenerTodos()
         .FirstOrDefault(m => m.PrestamoAsignado.Id == prestamoId);
     }
 

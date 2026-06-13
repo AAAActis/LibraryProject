@@ -8,9 +8,9 @@ namespace Libreria1.Services
 {
     public class ServicioCatalogo : ICatalogo<Libro>
     {
-        private readonly IRepositorio<Libro> _repositorio;
+        private readonly IRepositorio<Libro, string> _repositorio;
 
-        public ServicioCatalogo(IRepositorio<Libro> repositorio)
+        public ServicioCatalogo(IRepositorio<Libro, string> repositorio)
         {
             _repositorio = repositorio;
         }

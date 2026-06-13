@@ -9,14 +9,19 @@ public class ServicioPrestamo
 {
     private readonly ICatalogo<Libro> catalogo;
     private readonly IUsuarios servicioUsuarios;
-    private readonly IRepositorio<Prestamo> repositorioPrestamos;
     private readonly IServicioMulta servicioMultas;
-    public ServicioPrestamo(ICatalogo<Libro> catalogo, IUsuarios servicioUsuarios, IRepositorio<Prestamo> repositorioPrestamos, IServicioMulta servicioMultas)
-    {
+    private readonly IRepositorio<Prestamo, Guid> _repositorioPrestamos;
 
+    // Constructor unificado con la firma correcta para Prestamo
+    public ServicioPrestamo(
+        ICatalogo<Libro> catalogo, 
+        IUsuarios servicioUsuarios, 
+        IRepositorio<Prestamo, Guid> repositorioPrestamos, 
+        IServicioMulta servicioMultas)
+    {
         this.catalogo = catalogo;
         this.servicioUsuarios = servicioUsuarios;
-        this.repositorioPrestamos = repositorioPrestamos;
+        this._repositorioPrestamos = repositorioPrestamos;
         this.servicioMultas = servicioMultas;
     }
 
@@ -28,11 +33,13 @@ public class ServicioPrestamo
         {
             throw new UsuarioNoEncontradoException($"Usuario con número de socio '{nroSocio}' no encontrado.");
         }
+        
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
         if (libro == null)
         {
             throw new LibroNoEncontradoException(isbnLibro);
         }
+        
         // validar que el libro esté disponible
         ValidarDisponibilidadLibro(isbnLibro);
     
@@ -43,26 +50,25 @@ public class ServicioPrestamo
         libro.MarcarPrestado();
 
         // crear el préstamo 
-        var Usuario = servicioUsuarios.BuscarPorNumeroSocio(nroSocio);
         var nuevoPrestamo = new Prestamo(libro, usuario);
 
-        repositorioPrestamos.Agregar(nuevoPrestamo);
+        _repositorioPrestamos.Agregar(nuevoPrestamo);
         return nuevoPrestamo;
     }
-            
 
     public Prestamo DevolverLibro(int nroSocio, string isbnLibro)
     {
         // validar que el prestamo pertenece al usuario
-
-        var prestamo = repositorioPrestamos.ObtenerTodos()
+        var prestamo = _repositorioPrestamos.ObtenerTodos()
             .FirstOrDefault(p => p.UsuarioAsignado.NroSocio == nroSocio
             && p.LibroPrestado.Isbn == isbnLibro 
             && p.Activo);
+            
         if (prestamo == null)
         {
             throw new PrestamoNoEncontradoException();
         }
+        
         servicioMultas.CalcularMulta(prestamo);
 
         if (prestamo.Activo)
@@ -77,25 +83,27 @@ public class ServicioPrestamo
 
     public Prestamo ObtenerPrestamoEspecifico(int nroSocio, string isbnLibro)
     {
-        var prestamo = repositorioPrestamos.ObtenerTodos()
+        var prestamo = _repositorioPrestamos.ObtenerTodos()
             .FirstOrDefault(p => p.UsuarioAsignado.NroSocio == nroSocio
             && p.LibroPrestado.Isbn == isbnLibro);
+            
         if (prestamo == null)
         {
             throw new PrestamoNoEncontradoException();
         }
         return prestamo;
     }
+    
     public List<Prestamo> ListarPrestamosActivos()
     {
-        return repositorioPrestamos.ObtenerTodos()
+        return _repositorioPrestamos.ObtenerTodos()
         .Where(p => p.Activo)
         .ToList();
     }
 
     public List<Prestamo> ListarPrestamosPorUsuario(int nroSocio)
     {
-        return repositorioPrestamos.ObtenerTodos()
+        return _repositorioPrestamos.ObtenerTodos()
         .Where(p => p.UsuarioAsignado.NroSocio == nroSocio)
         .ToList();  
     }
