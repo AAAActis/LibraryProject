@@ -20,7 +20,7 @@ namespace Libreria1.Repositories
         IEnumerable<Libro> IRepositorio<Libro>.ObtenerTodos()
         {
             var libros = new List<Libro>();
-            const string query = "SELECT isbn, titulo, autor, estaDisponible FROM libros";
+            const string query = "SELECT isbn, titulo, autor, esta_disponible FROM libros";
             using var connection = new NpgsqlConnection(_connectionString);
             using var command = new NpgsqlCommand(query, connection);
 
