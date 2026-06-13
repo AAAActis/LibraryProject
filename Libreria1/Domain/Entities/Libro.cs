@@ -5,9 +5,9 @@ using System.Linq;
 using Libreria1.Application.Interfaces;
 
 namespace Libreria1.Domain.Entities;
-public class Libro : IEntidad<Guid>
+public class Libro : IEntidad<string>
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public string Id => Isbn; // Mapeo directo a la PK real
     public string Isbn { get; private set; }
     public string Titulo { get; private set; }
     public string Autor { get; private set; }
@@ -18,7 +18,7 @@ public class Libro : IEntidad<Guid>
 
     public Libro(string isbn, string titulo, string autor, int añoPublicacion, int cantPaginas)
     {
-        Id = Guid.NewGuid();
+         // El ID es el ISBN, que es único por definición
         Isbn = isbn;
         Titulo = titulo;
         Autor = autor;
@@ -30,7 +30,6 @@ public class Libro : IEntidad<Guid>
     // Constructor de sobrecarga para mapeos básicos (ej. historial de préstamos)
 public Libro(string isbn, string titulo, string autor)
 {
-    Id = Guid.NewGuid();
     Isbn = isbn;
     Titulo = titulo;
     Autor = autor;
