@@ -6,17 +6,16 @@ using Libreria1.Repositories;
 using Libreria1.Domain.Entities;
 using Libreria1.Application.Interfaces;
 
-public class RepositorioMultas : RepositorioEnMemoria<Multa>
-{
     // Este repositorio se encarga exclusivamente de gestionar las multas, utilizando la implementación en memoria para almacenamiento temporal.
-    public IEnumerable<Multa> ObtenerMultasPorPrestamo(Guid prestamoId)
+    public class RepositorioMultas : RepositorioEnMemoria<Multa, Guid>
     {
-        return ObtenerTodos().Where(m => m.PrestamoAsignado.Id == prestamoId);
-    }
+        public IEnumerable<Multa> ObtenerMultasPorPrestamo(Guid prestamoId)
+        {
+            return ObtenerTodos().Where(m => m.PrestamoAsignado.Id == prestamoId);
+        }
 
-    public IEnumerable<Multa> ObtenerMultasVencidas()
-    {
-        // Reutilizamos el ObtenerTodos() de la clase base y filtramos
-        return ObtenerTodos().Where(m => m.EstaVencida());
+        public IEnumerable<Multa> ObtenerMultasVencidas()
+        {
+            return ObtenerTodos().Where(m => m.EstaVencida());
+        }
     }
-}  

@@ -7,7 +7,7 @@ using Libreria1.Interfaces;
 
 namespace Libreria1.Repositories
 {
-    public class RepositorioLibrosPostgres : IRepositorio<Libro>
+    public class RepositorioLibrosPostgres : IRepositorio<Libro, string>
     {
         private readonly string _connectionString;
 
@@ -49,9 +49,9 @@ namespace Libreria1.Repositories
         }
         
         //Get by id: Select * from libros where isbn = @isbn
-        public Libro? ObtenerPorId(Guid id)
+        public Libro? ObtenerPorId(string id)
         {
-            /*
+            
             const string query = "SELECT isbn, titulo, autor, esta_disponible FROM libros WHERE isbn = @isbn";
 
             using var connection = new NpgsqlConnection(_connectionString);
@@ -76,8 +76,8 @@ namespace Libreria1.Repositories
             }
 
             return null; // Si no lo encuentra, devuelve null
-            */
-            return null; // Por ahora lo dejamos así porque el ISBN no es un Guid, habría que cambiar la firma del método en la interfaz
+            
+        
         }
 
 
@@ -103,7 +103,7 @@ namespace Libreria1.Repositories
         }
 
         // DELETE: DELETE FROM libros WHERE isbn = @isbn
-        public void Eliminar(Guid id)   
+        public void Eliminar(string id)   
         {
             const string query = "DELETE FROM libros WHERE isbn = @isbn";
             using var connection = new NpgsqlConnection(_connectionString);
