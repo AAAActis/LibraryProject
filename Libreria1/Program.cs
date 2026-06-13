@@ -18,10 +18,10 @@ var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new 
 builder.Services.AddControllers();
 
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
-builder.Services.AddScoped<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
-builder.Services.AddScoped<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));
-builder.Services.AddScoped<IRepositorio<Prestamo>>(sp => new RepositorioPrestamosPostgres(cadena));
-builder.Services.AddSingleton<IRepositorio<Multa>, RepositorioMultas>();
+builder.Services.AddScoped<IRepositorio<Libro, string>>(sp => new RepositorioLibrosPostgres(cadena));
+builder.Services.AddScoped<IRepositorio<Usuario, Guid>>(sp => new RepositorioUsuariosPostgres(cadena));
+builder.Services.AddScoped<IRepositorio<Prestamo, Guid>>(sp => new RepositorioPrestamosPostgres(cadena));
+builder.Services.AddSingleton<IRepositorio<Multa, Guid>, RepositorioMultas>(); // Multas se guardan en memoria porque son temporales y no críticas
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
 builder.Services.AddScoped<ICatalogo<Libro>, ServicioCatalogo>();
@@ -74,7 +74,7 @@ using (var connection = new NpgsqlConnection(connectionString))
 
 
 //se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
-app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
+//app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
