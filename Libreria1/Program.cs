@@ -17,6 +17,8 @@ var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
 
+// Agregamos la cadena de conexión a tu Docker
+var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
 builder.Services.AddScoped<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
 builder.Services.AddScoped<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));

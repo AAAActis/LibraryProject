@@ -106,7 +106,7 @@ namespace Libreria1.Controllers
 
                 // Retorna 201 Created con Location Header apuntando al GET por ISBN
                 return CreatedAtAction(nameof(ObtenerPorIsbn), new { isbn = libroDto.Isbn }, libroDto);
-            
+            }
         }
 
         // DELETE /api/libros/{isbn}
