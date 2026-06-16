@@ -10,9 +10,9 @@ namespace Libreria1.Application.Services
 {
     public class ServicioUsuario : IUsuarios
 {
-    private readonly IRepositorio<Usuario> _repositorio;
+    private readonly IRepositorio<Usuario, Guid> _repositorio;
 
-    public ServicioUsuario(IRepositorio<Usuario> repositorio)
+    public ServicioUsuario(IRepositorio<Usuario, Guid> repositorio)
     {
         _repositorio = repositorio;
     }

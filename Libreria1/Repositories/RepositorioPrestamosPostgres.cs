@@ -5,7 +5,7 @@ using Npgsql;
 namespace Libreria1 {
 
 
-    public class RepositorioPrestamosPostgres : IRepositorio<Prestamo>
+    public class RepositorioPrestamosPostgres : IRepositorio<Prestamo, Guid>
     {
     private readonly string _connectionString;
 

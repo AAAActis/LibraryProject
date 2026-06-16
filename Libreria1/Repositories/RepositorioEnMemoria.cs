@@ -6,7 +6,7 @@ using Libreria1.Application.Interfaces;
 
 namespace Libreria1.Repositories
 {
-    public class RepositorioEnMemoria<T> : IRepositorio<T> where T : IEntidad<Guid>
+    public class RepositorioEnMemoria<T, TId> : IRepositorio<T, TId> where T : IEntidad<TId>
     {
         // Acá centralizamos el almacenamiento temporal
         private readonly List<T> _datos = new List<T>();
@@ -16,9 +16,10 @@ namespace Libreria1.Repositories
             _datos.Add(entidad);
         }
 
-        public T? ObtenerPorId(Guid id)
+        public T? ObtenerPorId(TId id)
         {
-            return _datos.FirstOrDefault(e => e.Id == id);
+            // EqualityComparer es a prueba de fallos para tipos genéricos
+            return _datos.FirstOrDefault(e => EqualityComparer<TId>.Default.Equals(e.Id, id));
         }
 
         public IEnumerable<T> ObtenerTodos()
@@ -26,7 +27,7 @@ namespace Libreria1.Repositories
             return _datos.ToList();
         }
 
-        public void Eliminar(Guid id)
+        public void Eliminar(TId id)
         {
             var entidad = ObtenerPorId(id);
             if (entidad != null)

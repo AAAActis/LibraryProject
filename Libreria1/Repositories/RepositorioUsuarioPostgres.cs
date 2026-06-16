@@ -4,7 +4,7 @@ using Libreria1.Interfaces;
  
 namespace Libreria1.Repositories
 {
-    public class RepositorioUsuariosPostgres : IRepositorio<Usuario>
+    public class RepositorioUsuariosPostgres : IRepositorio<Usuario, Guid>
     {
         private readonly string _connectionString;
  
