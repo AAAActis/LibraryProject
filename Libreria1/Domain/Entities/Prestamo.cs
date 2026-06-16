@@ -6,13 +6,14 @@ public class Prestamo : IEntidad<Guid>
     public Libro LibroPrestado {get; private set;}
     public Usuario UsuarioAsignado {get; private set;}
     public DateTime FechaPrestamo {get; private set;}
-    public DateTime FechaDevolucion {get; private set;}
+    public DateTime? FechaDevolucion {get; private set;}
     public bool Activo {get; private set;}
 
 
     public string titulo => LibroPrestado.Titulo;
     public string autor => LibroPrestado.Autor;
     public bool estaDisponible => LibroPrestado.EstaDisponible;
+
 
     public Prestamo(Libro libro, Usuario usuario)
     {
@@ -24,6 +25,17 @@ public class Prestamo : IEntidad<Guid>
         Activo = true;
         LibroPrestado.MarcarPrestado();
     }
+    
+
+    internal Prestamo(Guid id, Libro libro, Usuario usuario, DateTime fechaPrestamo, DateTime? fechaDevolucion, bool activo)
+{
+    Id = id;
+    LibroPrestado = libro;
+    UsuarioAsignado = usuario;
+    FechaPrestamo = fechaPrestamo;
+    FechaDevolucion = fechaDevolucion;
+    Activo = activo;
+}
 
     public void CambiarEstado()
     {

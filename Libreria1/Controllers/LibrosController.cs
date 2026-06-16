@@ -76,21 +76,23 @@ namespace Libreria1.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult CrearLibro([FromBody] CrearLibroDto dto)
         {
-            //Intentamos buscar si ya existe
-            try
-            {
-                var libroExistente = _catalogo.BuscarLibroPorIsbn(dto.ISBN);
-                
-                // Si la línea de arriba no lanzó excepción, significa que el libro SÍ EXISTE.
-                // Como es un POST (Crear), esto es un conflicto.
-                return Conflict(new { mensaje = $"El libro con ISBN {dto.ISBN} ya existe en el sistema." });
-            }
-            catch (LibroNoEncontradoException)
-            {
-                // Si lanzó la excepción, significa que NO EXISTE. 
-                
+
+                Libro? libroExistente = null;
+                try
+                {
+                    // Intentamos buscarlo. Si el servicio tira la excepción, pasamos al catch.
+                    libroExistente = _catalogo.BuscarLibroPorIsbn(dto.ISBN);
+                }
+                catch (LibroNoEncontradoException)
+                {
+                }
+
+                if (libroExistente != null)
+                {
+                    return Conflict(new { mensaje = $"El libro con ISBN {dto.ISBN} ya existe en el sistema." });
+                }
                 // Instancia del Dominio
-                var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor);
+                var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor, int.Parse(dto.AñoPublicacion), dto.CantPaginas);
                 _catalogo.AgregarLibro(nuevoLibro);
 
                 // DTO de respuesta

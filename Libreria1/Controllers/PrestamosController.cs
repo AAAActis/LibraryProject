@@ -38,7 +38,7 @@ namespace Libreria1.Controllers
                 LibroIsbn = p.LibroPrestado.Isbn,
                 NroSocio = p.UsuarioAsignado.NroSocio,
                 FechaPrestamo = p.FechaPrestamo,
-                FechaDevolucion = p.FechaDevolucion,
+                FechaDevolucion = p.FechaDevolucion.GetValueOrDefault(), // Si es null, devuelve DateTime.MinValue
                 EstaActivo = p.Activo
             }).ToList();
 
@@ -75,7 +75,7 @@ namespace Libreria1.Controllers
                     LibroIsbn = prestamoActualizado.LibroPrestado.Isbn,
                     NroSocio = prestamoActualizado.UsuarioAsignado.NroSocio,
                     FechaPrestamo = prestamoActualizado.FechaPrestamo,
-                    FechaDevolucion = prestamoActualizado.FechaDevolucion,
+                    FechaDevolucion = prestamoActualizado.FechaDevolucion.GetValueOrDefault(), // Si es null, devuelve DateTime.MinValue
                     EstaActivo = prestamoActualizado.Activo
                 }; 
 

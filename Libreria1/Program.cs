@@ -9,10 +9,10 @@ using Microsoft.OpenApi;
 using Libreria1.Application.DTOs;
 using Libreria1.API.Controllers;
 using Npgsql;
-using Repositories;
+using Libreria1;
 
 var builder = WebApplication.CreateBuilder(args);
-var cadena = builder.Configuration.GetConnectionString("Libreria");
+var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
@@ -22,7 +22,7 @@ var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=post
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
 builder.Services.AddScoped<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
 builder.Services.AddScoped<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));
-builder.Services.AddSingleton<IRepositorio<Prestamo>, RepositorioEnMemoria<Prestamo>>();
+builder.Services.AddScoped<IRepositorio<Prestamo>>(sp => new RepositorioPrestamosPostgres(cadena));
 builder.Services.AddSingleton<IRepositorio<Multa>, RepositorioMultas>();
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
