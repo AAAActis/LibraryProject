@@ -10,15 +10,16 @@ using Libreria1.Application.DTOs;
 using Libreria1.API.Controllers;
 using Npgsql;
 using Libreria1;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
+var cadena = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
 
 // Agregamos la cadena de conexión a tu Docker
-var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
+//var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
 builder.Services.AddScoped<IRepositorio<Libro>>(sp => new RepositorioLibrosPostgres(cadena));
 builder.Services.AddScoped<IRepositorio<Usuario>>(sp => new RepositorioUsuariosPostgres(cadena));
@@ -43,6 +44,7 @@ builder.Services.AddSwaggerGen(opciones =>
         
     });
 
+
     // 1. Calculamos el nombre del archivo XML que se generó
     var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
 
@@ -53,6 +55,15 @@ builder.Services.AddSwaggerGen(opciones =>
     opciones.IncludeXmlComments(xmlPath);
 
 }); // Agrega Swagger para documentación de la API
+
+builder.Services.AddDbContext<LibreriaContext>(options =>
+{
+    //Usa PostgreSQL y lee la cadena de conexión de appsettings.json
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+           //Activa el log de SQL en la consola para ver qué hace EF Core por detrás
+           .LogTo(Console.WriteLine, LogLevel.Information);
+});
+
 var app = builder.Build();
 
 
