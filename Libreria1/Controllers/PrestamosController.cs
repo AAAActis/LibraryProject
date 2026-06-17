@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Libreria1.Application.DTOs;
+using Libreria1.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreria1.Controllers
@@ -11,9 +12,9 @@ namespace Libreria1.Controllers
     public class PrestamosController : ControllerBase
     {
         private readonly ServicioPrestamo _servicioPrestamo;
-        private readonly ServicioMultas _servicioMulta;
+        private readonly IServicioMulta _servicioMulta;
 
-        public PrestamosController(ServicioPrestamo servicioPrestamo, ServicioMultas servicioMulta)
+        public PrestamosController(ServicioPrestamo servicioPrestamo, IServicioMulta servicioMulta)
         {
             _servicioPrestamo = servicioPrestamo;
             _servicioMulta = servicioMulta;
@@ -108,8 +109,18 @@ public ActionResult<MultaDto> ConsultarMulta(int nroSocio, string isbnLibro)
 {
 
         var prestamo = _servicioPrestamo.ObtenerPrestamoEspecifico(nroSocio, isbnLibro);
-        
+        //VALIDACIÓN SALVAVIDAS: Si no hay préstamo, devolvemos un 404 limpio
+        if (prestamo == null)
+        {
+            return NotFound(new { mensaje = $"No se encontró un préstamo activo del libro {isbnLibro} para el socio {nroSocio}." });
+        }
+                
         var multa = _servicioMulta.CalcularMulta(prestamo); // Suponiendo que esto lanza excepción si no está vencido
+
+        if (multa == null)
+        {
+            return Ok(new { mensaje = "El préstamo está al día, no hay multas." });
+        }
 
         var multaDto = new MultaDto
         {
