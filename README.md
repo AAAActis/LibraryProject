@@ -30,3 +30,14 @@
 4. **Ejecturar la aplicacion**
    ```bash
    dotnet run
+
+# Base de Datos Local - PostgreSQL
+
+Este documento detalla los pasos para levantar y conectar el servidor local de base de datos mediante Docker para las prácticas del equipo.
+
+## 1. Levantar el Servidor
+
+Asegurate de tener el servicio de Docker activo. Ejecutá el siguiente comando en la terminal para crear y arrancar el contenedor en segundo plano:
+
+```bash
+docker run --name libreria-db -e POSTGRES_PASSWORD=1234 -e POSTGRES_DB=libreria -p 5432:5432 -d postgres

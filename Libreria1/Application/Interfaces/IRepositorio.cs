@@ -2,18 +2,17 @@ using System;
 using System.Collections.Generic;
 using Libreria1.Domain.Entities;  
 using Libreria1.Application.Interfaces;  
-
 using Libreria1.Domain.Entities;
 using System.Collections.Generic;
 using Libreria1.Application.Interfaces;
 
 namespace Libreria1.Interfaces
 {
-    public interface IRepositorio<T> where T : IEntidad<Guid>
+    public interface IRepositorio<T, TId> where T : IEntidad<TId>
     {
         void Agregar(T entidad);
-        T? ObtenerPorId(Guid id);
+        T? ObtenerPorId(TId id);
         IEnumerable<T> ObtenerTodos();
-        void Eliminar(Guid id);
+        void Eliminar(TId id);
     }
 }

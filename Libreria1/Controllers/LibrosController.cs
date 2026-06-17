@@ -77,15 +77,22 @@ namespace Libreria1.Controllers
         public IActionResult CrearLibro([FromBody] CrearLibroDto dto)
         {
 
-                // Validación de duplicados
-                var libroExistente = _catalogo.BuscarLibroPorIsbn(dto.ISBN);
+                Libro? libroExistente = null;
+                try
+                {
+                    // Intentamos buscarlo. Si el servicio tira la excepción, pasamos al catch.
+                    libroExistente = _catalogo.BuscarLibroPorIsbn(dto.ISBN);
+                }
+                catch (LibroNoEncontradoException)
+                {
+                }
+
                 if (libroExistente != null)
                 {
                     return Conflict(new { mensaje = $"El libro con ISBN {dto.ISBN} ya existe en el sistema." });
                 }
-
                 // Instancia del Dominio
-                var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor);
+                var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor, int.Parse(dto.AñoPublicacion), dto.CantPaginas);
                 _catalogo.AgregarLibro(nuevoLibro);
 
                 // DTO de respuesta
@@ -99,8 +106,8 @@ namespace Libreria1.Controllers
 
                 // Retorna 201 Created con Location Header apuntando al GET por ISBN
                 return CreatedAtAction(nameof(ObtenerPorIsbn), new { isbn = libroDto.Isbn }, libroDto);
-            
-        }
+            }
+        
 
         // DELETE /api/libros/{isbn}
         [HttpDelete("{isbn}")]
