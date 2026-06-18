@@ -1,7 +1,10 @@
 using Libreria1.Application.Interfaces;
+using System.ComponentModel.DataAnnotations;
+
 namespace Libreria1.Domain.Entities;
 public class Prestamo : IEntidad<Guid>
 {
+    [Key]
     public Guid Id {get; private set;} = Guid.NewGuid();
     public Libro LibroPrestado {get; private set;}
     public Usuario UsuarioAsignado {get; private set;}
@@ -14,6 +17,7 @@ public class Prestamo : IEntidad<Guid>
     public string autor => LibroPrestado.Autor;
     public bool estaDisponible => LibroPrestado.EstaDisponible;
 
+    protected Prestamo() { } // Constructor protegido para EF Core
 
     public Prestamo(Libro libro, Usuario usuario)
     {
