@@ -3,17 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Libreria1.Application.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Libreria1.Domain.Entities;
 public class Libro : IEntidad<string>
 {
     public string Id => Isbn; // Mapeo directo a la PK real
+    [Key]
     public string Isbn { get; private set; }
     public string Titulo { get; private set; }
     public string Autor { get; private set; }
     public int AñoPublicacion { get; private set; }
     public int CantPaginas { get; private set; }
     public bool EstaDisponible { get; set; }
+
+    protected Libro() { } // Constructor protegido para EF Core
 
 
     public Libro(string isbn, string titulo, string autor, int añoPublicacion, int cantPaginas)
