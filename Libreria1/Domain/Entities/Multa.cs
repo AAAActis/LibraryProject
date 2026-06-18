@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Libreria1.Application.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Libreria1.Domain.Entities;
 public class Multa : IEntidad<Guid>
 {
     /// Responsabilidad única: Representa una penalización económica por la devolución tardía de un préstamo y calcula su costo.
-    
+    ///     public Guid Id { get; private set; } = Guid.NewGuid();
     [Key]
     public Guid Id { get; private set; } = Guid.NewGuid();
     public Guid PrestamoId { get; private set; }
