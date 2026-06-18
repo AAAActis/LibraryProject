@@ -13,5 +13,7 @@ namespace Libreria1.Interfaces
         T? ObtenerPorId(TId id);
         IEnumerable<T> ObtenerTodos();
         void Eliminar(TId id);
+
+        IEnumerable<Libro> ObtenerLibrosMasPrestados();
     }
 }
