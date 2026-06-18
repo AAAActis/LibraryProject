@@ -24,7 +24,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IRepositorio<Libro, string>, RepositorioLibroEF>();
 builder.Services.AddScoped<IRepositorio<Usuario, Guid>>(sp => new RepositorioUsuariosPostgres(cadena));
 builder.Services.AddScoped<IRepositorio<Prestamo, Guid>>(sp => new RepositorioPrestamosPostgres(cadena));
-builder.Services.AddSingleton<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
+builder.Services.AddScoped<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
 builder.Services.AddScoped<ICatalogo<Libro>, ServicioCatalogo>();

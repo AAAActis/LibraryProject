@@ -12,7 +12,7 @@ namespace Libreria1.Repositories
     {
         private readonly DbContext _context;
 
-        public RepositorioMultasEF(DbContext context)
+        public RepositorioMultasEF(LibreriaContext context)
         {
             _context = context;
         }
