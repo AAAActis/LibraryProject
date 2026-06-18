@@ -1,9 +1,13 @@
 //Responsabilidad unica: Representar un usuario en el sistema de biblioteca.
 using Libreria1.Application.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Libreria1.Domain.Entities;
 public class Usuario : IEntidad<Guid>
 {
     private static int _contador = 1;
+[Key]
     public Guid Id { get; private set; } = Guid.NewGuid();
     public int NroSocio {get; private set;}
     public string Nombre {get; private set;}
