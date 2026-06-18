@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Libreria1.Application.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,6 +10,8 @@ public class Multa : IEntidad<Guid>
     ///     public Guid Id { get; private set; } = Guid.NewGuid();
     [Key]
     public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid PrestamoId { get; private set; }
+    [ForeignKey("PrestamoId")]
     public Prestamo PrestamoAsignado { get; private set; } 
     public int DiasRetraso { get; private set; }
     public decimal MontoMulta { get; private set; }

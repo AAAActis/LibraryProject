@@ -14,23 +14,24 @@ public ServicioMultas(IRepositorio<Multa, Guid> repositorioMultas)
         this._repositorioMultas = repositorioMultas;
     }
 
-    public Multa CalcularMulta (Prestamo prestamo)
+    public Multa? CalcularMulta (Prestamo prestamo)
     {
-        //verificar si el prestamo esta vencido antes de calcular multa
-        if (prestamo == null)
-        {
-            throw new PrestamoNoEncontradoException("Prestamo no encontrado");  
-        }
-        // calcular multa
-        var diasRetraso = (DateTime.Now - prestamo.FechaPrestamo).Days - 30;
+       if (prestamo == null) throw new PrestamoNoEncontradoException("Préstamo no encontrado");
+    
+    if (prestamo.FechaDevolucion.HasValue && DateTime.Now > prestamo.FechaDevolucion.Value)
+    {
+        var diasRetraso = (DateTime.Now - prestamo.FechaDevolucion.Value).Days;
         if (diasRetraso > 0)
         {
+            // Respeta tu diseño: le pasás el objeto entero
             var multa = new Multa(prestamo, diasRetraso);
+            
             _repositorioMultas.Agregar(multa);
             return multa;
         }
-        return null; // no hay multa si no hay retraso
     }
+    return null;
+}
     
     public List<Multa> ObtenerMultasPorUsuario(int nroSocio)
     {
