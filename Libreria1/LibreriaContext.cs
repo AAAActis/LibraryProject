@@ -14,4 +14,18 @@ public class LibreriaContext : DbContext
         public DbSet<Prestamo> Prestamos { get; set; }
         public DbSet<Multa> Multas { get; set; }
     
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    // Relación Prestamo → Libro (muchos préstamos pueden tener un libro)
+    modelBuilder.Entity<Prestamo>()
+        .HasOne(p => p.LibroPrestado)
+        .WithMany()
+        .HasForeignKey(p => p.LibroId);
+
+    // Relación Prestamo → Usuario (muchos préstamos pueden tener un usuario)
+    modelBuilder.Entity<Prestamo>()
+        .HasOne(p => p.UsuarioAsignado)
+        .WithMany()
+        .HasForeignKey(p => p.UsuarioId);
+    }
 }

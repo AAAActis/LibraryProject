@@ -10,9 +10,9 @@ namespace Libreria1.Repositories
 {
     public class RepositorioMultasEF : IRepositorio<Multa, Guid>
     {
-        private readonly DbContext _context;
+        private readonly LibreriaContext _context;
 
-        public RepositorioMultasEF(DbContext context)
+        public RepositorioMultasEF(LibreriaContext context)
         {
             _context = context;
         }
