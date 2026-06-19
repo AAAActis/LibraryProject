@@ -22,7 +22,7 @@ builder.Services.AddControllers();
 //var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
 builder.Services.AddScoped<IRepositorio<Libro, string>, RepositorioLibroEF>();
-builder.Services.AddScoped<IRepositorio<Usuario, Guid>>(sp => new RepositorioUsuariosPostgres(cadena));
+builder.Services.AddScoped<IRepositorio<Usuario, Guid>, RepositorioUsuariosEF>();
 builder.Services.AddScoped<IRepositorio<Prestamo, Guid>>(sp => new RepositorioPrestamosPostgres(cadena));
 builder.Services.AddScoped<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
 
