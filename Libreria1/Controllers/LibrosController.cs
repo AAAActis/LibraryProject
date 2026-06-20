@@ -6,6 +6,7 @@ using System.Linq;
 using Libreria1.Interfaces;
 using Libreria1.Domain.Entities;
 using Libreria1.Application.DTOs;
+using Libreria1.Repositories;
 
 namespace Libreria1.Controllers
 {
@@ -14,13 +15,29 @@ namespace Libreria1.Controllers
     public class LibrosController : ControllerBase
     {
         private readonly ICatalogo<Libro> _catalogo;
+        private readonly IRepositorio<Libro, string> _repositorioLibros;
 
-        // Inyección de dependencias por constructor (DIP)
-        public LibrosController(ICatalogo<Libro> catalogo)
+        // Solo inyectamos la interfaz (DIP)
+        public LibrosController(ICatalogo<Libro> catalogo, IRepositorio<Libro, string> repositorioLibros)
         {
             _catalogo = catalogo;
+            _repositorioLibros = repositorioLibros;
         }
 
+        [HttpGet("reportes/mas-prestados")]
+        public IActionResult ObtenerLibrosMasPrestados()
+        {
+            try
+            {
+                // Ahora usamos el repositorio inyectado correctamente
+                var libros = _repositorioLibros.ObtenerLibrosMasPrestados();
+                return Ok(libros);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al obtener los libros: {ex.Message}");
+            }
+        }
         // GET /api/libros
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LibroDto>), StatusCodes.Status200OK)]

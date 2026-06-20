@@ -12,12 +12,11 @@ public class RepositorioLibroEF : IRepositorio<Libro, string>
     private readonly Prestamo prestamo;
 
     //inyeccion de dependiencias para el contexto de EF Core
-    public RepositorioLibroEF(LibreriaContext context, Prestamo prestamo)
+    public RepositorioLibroEF(LibreriaContext context)
     {
         _context = context;
-        this.prestamo = prestamo;
     }
-   public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+    public IEnumerable<Libro> ObtenerLibrosMasPrestados()
     {
     // C# hace la magia del JOIN y el COUNT por ti
     return _context.Libros
@@ -58,4 +57,18 @@ public class RepositorioLibroEF : IRepositorio<Libro, string>
         }
     }
 
+    public IEnumerable<Usuario> UsuariosConPrestamosActivos()
+    {
+        throw new NotImplementedException();
+    }
+
+    public object ObtenerMultasAgrupadasPorUsuario()
+    {
+        throw new NotImplementedException();
+    }
+
+    object IRepositorio<Libro, string>.UsuariosConPrestamosActivos()
+    {
+        return UsuariosConPrestamosActivos();
+    }
 }

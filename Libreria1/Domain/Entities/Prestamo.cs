@@ -24,6 +24,7 @@ public class Prestamo : IEntidad<Guid>
     public DateTime? FechaDevolucion { get; private set; }
     public bool Activo { get; private set; }
 
+    
     // [NotMapped] evita que EF Core intente crear columnas "titulo" o "autor" en PostgreSQL
     [NotMapped] public string titulo => LibroPrestado?.Titulo;
     [NotMapped] public string autor => LibroPrestado?.Autor;

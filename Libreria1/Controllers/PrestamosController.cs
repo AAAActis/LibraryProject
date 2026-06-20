@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Libreria1.Application.DTOs;
 using Libreria1.Application.Interfaces;
+using Libreria1.Domain.Entities;
+using Libreria1.Interfaces;
+using Libreria1.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreria1.Controllers
@@ -13,11 +16,28 @@ namespace Libreria1.Controllers
     {
         private readonly ServicioPrestamo _servicioPrestamo;
         private readonly IServicioMulta _servicioMulta;
+        private readonly IRepositorio<Multa, Guid> _repositorioMultas; // Para el endpoint de multas agrupadas
 
-        public PrestamosController(ServicioPrestamo servicioPrestamo, IServicioMulta servicioMulta)
+        public PrestamosController(ServicioPrestamo servicioPrestamo, IServicioMulta servicioMulta, IRepositorio<Multa, Guid> repositorioMultas)
         {
             _servicioPrestamo = servicioPrestamo;
             _servicioMulta = servicioMulta;
+            _repositorioMultas = repositorioMultas;
+        }
+
+        [HttpGet("reportes/agrupadas-por-usuario")]
+        public IActionResult ObtenerMultasAgrupadas()
+        {
+            try
+            {
+                // Llama a tu método con el GroupBy en RepositorioMultasEF
+                var multasAgrupadas = _repositorioMultas.ObtenerMultasAgrupadasPorUsuario();
+                return Ok(multasAgrupadas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al obtener las multas: {ex.Message}");
+            }
         }
 
         // GET: api/prestamos/usuario/{nroSocio}

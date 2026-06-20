@@ -15,5 +15,7 @@ namespace Libreria1.Interfaces
         void Eliminar(TId id);
 
         IEnumerable<Libro> ObtenerLibrosMasPrestados();
+        object UsuariosConPrestamosActivos();
+        object ObtenerMultasAgrupadasPorUsuario();
     }
 }

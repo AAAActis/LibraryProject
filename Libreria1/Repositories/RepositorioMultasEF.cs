@@ -17,6 +17,23 @@ namespace Libreria1.Repositories
             _context = context;
         }
 
+        public object ObtenerMultasAgrupadasPorUsuario()
+        {
+            var multasPorUsuario = _context.Set<Multa>()
+                .Include(m => m.PrestamoAsignado) // Cambiado a PrestamoAsignado
+                    .ThenInclude(p => p.UsuarioAsignado) // Cambiado a UsuarioAsignado
+                .GroupBy(m => m.PrestamoAsignado.UsuarioAsignado.NroSocio) // Cambiado a la ruta correcta
+                .Select(grupo => new 
+                {
+                    NumeroSocio = grupo.Key,               // La llave por la que agrupamos
+                    CantidadDeMultas = grupo.Count(),      // Contamos cuántas multas tiene
+                    TotalDiasRetraso = grupo.Sum(m => m.DiasRetraso) 
+                })
+                .ToList();
+
+            return multasPorUsuario;
+        }
+
         public void Agregar(Multa entidad)
         {
             _context.Set<Multa>().Add(entidad);
@@ -68,5 +85,19 @@ namespace Libreria1.Repositories
                 .ToList();
         }
 
+        public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Usuario> UsuariosConPrestamosActivos()
+        {
+            throw new NotImplementedException();
+        }
+
+        object IRepositorio<Multa, Guid>.UsuariosConPrestamosActivos()
+        {
+            return UsuariosConPrestamosActivos();
+        }
     }
 }

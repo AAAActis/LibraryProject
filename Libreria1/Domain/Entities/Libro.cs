@@ -19,6 +19,8 @@ public class Libro : IEntidad<string>
     public int AñoPublicacion { get; private set; }
     public int CantPaginas { get; private set; }
     public bool EstaDisponible { get; set; }
+    
+    [InverseProperty("LibroPrestado")]
     public ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
 
     protected Libro() { } // Constructor protegido para EF Core
