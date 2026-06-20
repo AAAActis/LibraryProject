@@ -119,5 +119,30 @@ namespace Libreria1.Repositories
                 reader.GetDateTime(reader.GetOrdinal("fecha_registro"))
             );
         }
+
+        public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Usuario> UsuariosConPrestamosActivos()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+        {
+            throw new NotImplementedException();
+        }
+
+        object IRepositorio<Usuario, Guid>.ObtenerMultasAgrupadasPorUsuario()
+        {
+            return ObtenerMultasAgrupadasPorUsuario();
+        }
+
+        object IRepositorio<Usuario, Guid>.UsuariosConPrestamosActivos()
+        {
+            return UsuariosConPrestamosActivos();
+        }
     }
 }

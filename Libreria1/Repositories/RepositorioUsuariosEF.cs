@@ -8,10 +8,19 @@ namespace Libreria1.Repositories;
 public class RepositorioUsuariosEF : IRepositorio<Usuario, Guid>
 {
     private readonly LibreriaContext _context;
+    private readonly Prestamo prestamo;
 
     public RepositorioUsuariosEF(LibreriaContext context)
     {
         _context = context;
+    }
+
+    public object UsuariosConPrestamosActivos()
+    {
+        return _context.Usuarios
+            .Include(u => u.Prestamos)
+            .Where(u => u.Prestamos.Any(p => p.FechaDevolucion == null))
+            .ToList();
     }
 
     public IEnumerable<Usuario> ObtenerTodos()
@@ -52,4 +61,15 @@ public class RepositorioUsuariosEF : IRepositorio<Usuario, Guid>
             _context.SaveChanges();
         }
     }
+
+    public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+    {
+        throw new NotImplementedException();
+    }
+
+    public object ObtenerMultasAgrupadasPorUsuario()
+    {
+        throw new NotImplementedException();
+    }
+
 }

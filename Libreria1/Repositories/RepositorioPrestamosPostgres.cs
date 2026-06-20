@@ -202,8 +202,29 @@ public IEnumerable<Prestamo> ObtenerPorUsuario(Guid usuarioId)
     command.ExecuteNonQuery();
 }
 
-        
+        public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public IEnumerable<Usuario> UsuariosConPrestamosActivos()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+        {
+            throw new NotImplementedException();
+        }
+
+        object IRepositorio<Prestamo, Guid>.ObtenerMultasAgrupadasPorUsuario()
+        {
+            return ObtenerMultasAgrupadasPorUsuario();
+        }
+
+        object IRepositorio<Prestamo, Guid>.UsuariosConPrestamosActivos()
+        {
+            return UsuariosConPrestamosActivos();
+        }
     }
 }

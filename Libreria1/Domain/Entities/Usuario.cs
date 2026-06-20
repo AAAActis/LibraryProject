@@ -7,13 +7,16 @@ namespace Libreria1.Domain.Entities;
 public class Usuario : IEntidad<Guid>
 {
     private static int _contador = 1;
-    [Key]
-    public Guid Id { get; private set; } = Guid.NewGuid();
     public int NroSocio {get; private set;}
+    [Key]
+    public Guid Id {get; private set;}
     public string Nombre {get; private set;}
     public string Apellido {get; private set;}
     public string Email {get; private set;}
     public DateTime FechaRegistro {get; private set;}
+
+    [InverseProperty("UsuarioAsignado")]
+    public ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
 
     protected Usuario() { } // Constructor protegido para EF Core
     

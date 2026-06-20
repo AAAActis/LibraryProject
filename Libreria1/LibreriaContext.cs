@@ -14,18 +14,21 @@ public class LibreriaContext : DbContext
         public DbSet<Prestamo> Prestamos { get; set; }
         public DbSet<Multa> Multas { get; set; }
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-    // Relación Prestamo → Libro (muchos préstamos pueden tener un libro)
-    modelBuilder.Entity<Prestamo>()
-        .HasOne(p => p.LibroPrestado)
-        .WithMany()
-        .HasForeignKey(p => p.LibroId);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Esto es buena practica dejenlo
+            base.OnModelCreating(modelBuilder);
 
-    // Relación Prestamo → Usuario (muchos préstamos pueden tener un usuario)
-    modelBuilder.Entity<Prestamo>()
-        .HasOne(p => p.UsuarioAsignado)
-        .WithMany()
-        .HasForeignKey(p => p.UsuarioId);
-    }
+            // Le decimos: "Un Préstamo tiene un LibroPrestado, un Libro tiene muchos Préstamos, y la columna real es LibroId"
+            modelBuilder.Entity<Prestamo>()
+                .HasOne(p => p.LibroPrestado)
+                .WithMany(l => l.Prestamos)
+                .HasForeignKey(p => p.LibroId);
+
+            // Hacemos lo mismo para el Usuario
+            modelBuilder.Entity<Prestamo>()
+                .HasOne(p => p.UsuarioAsignado)
+                .WithMany(u => u.Prestamos) 
+                .HasForeignKey(p => p.UsuarioId);
+        }
 }
