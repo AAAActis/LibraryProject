@@ -11,6 +11,7 @@ using Libreria1.API.Controllers;
 using Npgsql;
 using Libreria1;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
@@ -23,7 +24,6 @@ builder.Services.AddControllers();
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
 builder.Services.AddScoped<IRepositorio<Libro, string>, RepositorioLibroEF>();
 builder.Services.AddScoped<IRepositorio<Usuario, Guid>, RepositorioUsuariosEF>();
-builder.Services.AddScoped<IRepositorio<Prestamo, Guid>>(sp => new RepositorioPrestamosPostgres(cadena));
 builder.Services.AddScoped<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
@@ -32,6 +32,12 @@ builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
 
+//Registramos LibreriaContext
+builder.Services.AddDbContext<LibreriaContext>(opt => 
+{
+    // Usamos la connection string que apunta a la IP de Tailscale de Santi
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddSwaggerGen(opciones =>
 {
