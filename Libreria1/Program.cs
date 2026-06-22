@@ -11,9 +11,10 @@ using Libreria1.API.Controllers;
 using Npgsql;
 using Libreria1;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
-var cadena = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
+var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
 builder.Services.AddControllers();
@@ -21,10 +22,9 @@ builder.Services.AddControllers();
 // Agregamos la cadena de conexión a tu Docker
 //var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 // 2. Inyección de Repositorios (Singleton: los datos viven mientras la API esté prendida)
-builder.Services.AddScoped<IRepositorio<Libro, string>>(sp => new RepositorioLibrosPostgres(cadena));
-builder.Services.AddScoped<IRepositorio<Usuario, Guid>>(sp => new RepositorioUsuariosPostgres(cadena));
-builder.Services.AddScoped<IRepositorio<Prestamo, Guid>>(sp => new RepositorioPrestamosPostgres(cadena));
-builder.Services.AddSingleton<IRepositorio<Multa, Guid>, RepositorioMultas>(); // Multas se guardan en memoria porque son temporales y no críticas
+builder.Services.AddScoped<IRepositorio<Libro, string>, RepositorioLibroEF>();
+builder.Services.AddScoped<IRepositorio<Usuario, Guid>, RepositorioUsuariosEF>();
+builder.Services.AddScoped<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
 builder.Services.AddScoped<ICatalogo<Libro>, ServicioCatalogo>();
@@ -32,6 +32,12 @@ builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
 
+//Registramos LibreriaContext
+builder.Services.AddDbContext<LibreriaContext>(opt => 
+{
+    // Usamos la connection string que apunta a la IP de Tailscale de Santi
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddSwaggerGen(opciones =>
 {
@@ -59,7 +65,7 @@ builder.Services.AddSwaggerGen(opciones =>
 builder.Services.AddDbContext<LibreriaContext>(options =>
 {
     //Usa PostgreSQL y lee la cadena de conexión de appsettings.json
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Libreria"))
            //Activa el log de SQL en la consola para ver qué hace EF Core por detrás
            .LogTo(Console.WriteLine, LogLevel.Information);
 });

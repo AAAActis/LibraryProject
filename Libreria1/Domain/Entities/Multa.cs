@@ -1,16 +1,28 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Libreria1.Application.Interfaces;
+
 namespace Libreria1.Domain.Entities;
 public class Multa : IEntidad<Guid>
 {
     /// Responsabilidad única: Representa una penalización económica por la devolución tardía de un préstamo y calcula su costo.
+    ///     public Guid Id { get; private set; } = Guid.NewGuid();
+    [Key]
     public Guid Id { get; private set; } = Guid.NewGuid();
-    public Prestamo PrestamoAsignado { get; private set; } 
+    public Guid PrestamoId { get; private set; }
+
+    [ForeignKey("PrestamoId")]
+    public Prestamo PrestamoAsignado { get; private set; }
+     
     public int DiasRetraso { get; private set; }
     public decimal MontoMulta { get; private set; }
     public DateTime FechaGenerada { get; private set; }
 
 
+
     private const decimal TarifaDiaria = 50.0m;
+
+    protected Multa() { } // Constructor protegido para EF Core
 
     public Multa(Prestamo prestamoId, int diasRetraso)
     {

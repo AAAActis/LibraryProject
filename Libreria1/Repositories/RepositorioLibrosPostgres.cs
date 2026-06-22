@@ -113,6 +113,30 @@ namespace Libreria1.Repositories
             command.ExecuteNonQuery();
         }
 
+        public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Usuario> UsuariosConPrestamosActivos()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+        {
+            throw new NotImplementedException();
+        }
+
+        object IRepositorio<Libro, string>.ObtenerMultasAgrupadasPorUsuario()
+        {
+            return ObtenerMultasAgrupadasPorUsuario();
+        }
+
+        object IRepositorio<Libro, string>.UsuariosConPrestamosActivos()
+        {
+            return UsuariosConPrestamosActivos();
+        }
     }
 
 }

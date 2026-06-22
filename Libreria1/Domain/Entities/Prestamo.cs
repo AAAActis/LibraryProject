@@ -1,20 +1,36 @@
 using Libreria1.Application.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Libreria1.Domain.Entities;
 public class Prestamo : IEntidad<Guid>
 {
-    public Guid Id {get; private set;} = Guid.NewGuid();
-    public Libro LibroPrestado {get; private set;}
-    public Usuario UsuarioAsignado {get; private set;}
-    public DateTime FechaPrestamo {get; private set;}
-    public DateTime? FechaDevolucion {get; private set;}
-    public bool Activo {get; private set;}
+    
+    [Key]
+    public Guid Id { get; private set; } = Guid.NewGuid();
 
+    // Claves foráneas explícitas
+    public string LibroId { get; private set; }
+    public Guid UsuarioId { get; private set; }
 
-    public string titulo => LibroPrestado.Titulo;
-    public string autor => LibroPrestado.Autor;
-    public bool estaDisponible => LibroPrestado.EstaDisponible;
+    // Propiedades de navegación atadas a las FK
+    [ForeignKey("LibroId")]
+    public Libro LibroPrestado { get; private set; }
 
+    [ForeignKey("UsuarioId")]
+    public Usuario UsuarioAsignado { get; private set; }
+    
+    public DateTime FechaPrestamo { get; private set; }
+    public DateTime? FechaDevolucion { get; private set; }
+    public bool Activo { get; private set; }
 
+    
+    // [NotMapped] evita que EF Core intente crear columnas "titulo" o "autor" en PostgreSQL
+    [NotMapped] public string titulo => LibroPrestado?.Titulo;
+    [NotMapped] public string autor => LibroPrestado?.Autor;
+    [NotMapped] public bool estaDisponible => LibroPrestado?.EstaDisponible ?? false;
+
+    protected Prestamo() { } // Constructor protegido para EF Core
     public Prestamo(Libro libro, Usuario usuario)
     {
         Id = Guid.NewGuid();

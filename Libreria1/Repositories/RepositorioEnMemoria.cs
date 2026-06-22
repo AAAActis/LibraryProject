@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Libreria1.Interfaces;
 using Libreria1.Application.Interfaces;
+using Libreria1.Domain.Entities;
 
 namespace Libreria1.Repositories
 {
@@ -34,6 +35,31 @@ namespace Libreria1.Repositories
             {
                 _datos.Remove(entidad);
             }
+        }
+
+        public IEnumerable<Libro> ObtenerLibrosMasPrestados()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Usuario> UsuariosConPrestamosActivos()
+        {
+            throw new NotImplementedException();
+        }
+
+        object ObtenerMultasAgrupadasPorUsuario()
+        {
+            return ObtenerMultasAgrupadasPorUsuario();
+        }
+
+        object IRepositorio<T, TId>.ObtenerMultasAgrupadasPorUsuario()
+        {
+            return ObtenerMultasAgrupadasPorUsuario();
+        }
+
+        object IRepositorio<T, TId>.UsuariosConPrestamosActivos()
+        {
+            return UsuariosConPrestamosActivos();
         }
     }
 }

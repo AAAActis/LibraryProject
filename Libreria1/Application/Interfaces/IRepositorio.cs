@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using Libreria1.Domain.Entities;  
 using Libreria1.Application.Interfaces;  
-using Libreria1.Domain.Entities;
 using System.Collections.Generic;
-using Libreria1.Application.Interfaces;
+
 
 namespace Libreria1.Interfaces
 {
@@ -14,5 +13,9 @@ namespace Libreria1.Interfaces
         T? ObtenerPorId(TId id);
         IEnumerable<T> ObtenerTodos();
         void Eliminar(TId id);
+
+        IEnumerable<Libro> ObtenerLibrosMasPrestados();
+        object UsuariosConPrestamosActivos();
+        object ObtenerMultasAgrupadasPorUsuario();
     }
 }

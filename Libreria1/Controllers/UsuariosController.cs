@@ -3,6 +3,8 @@ using Libreria1.Domain.Entities;
 using Libreria1.Application.DTOs;
 using Libreria1.Application.Interfaces;
 using Libreria1.Domain.Exceptions;
+using Libreria1.Repositories;
+using Libreria1.Interfaces;
 
 namespace Libreria1.API.Controllers
 {
@@ -10,11 +12,28 @@ namespace Libreria1.API.Controllers
     [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
     {
+        private readonly IRepositorio<Usuario, Guid> _repositorioUsuarios;
         private readonly IUsuarios _servicioUsuario;
-
-        public UsuariosController(IUsuarios servicioUsuario)
+        
+        public UsuariosController(IUsuarios servicioUsuario, IRepositorio<Usuario, Guid> repositorioUsuarios)
         {
             _servicioUsuario = servicioUsuario;
+            _repositorioUsuarios = repositorioUsuarios;
+        }
+
+        [HttpGet("reportes/con-prestamos-activos")]
+        public IActionResult ObtenerUsuariosConPrestamosActivos()
+        {
+            try
+            {
+                // Llama al método de RepositorioUsuarioEF que hizo Santi
+                var usuarios = _repositorioUsuarios.UsuariosConPrestamosActivos();
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al obtener los usuarios: {ex.Message}");
+            }
         }
 
         // GET api/usuarios
