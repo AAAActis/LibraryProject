@@ -6,6 +6,7 @@ using Libreria1.Application.Interfaces;
 using Libreria1.Domain.Entities;
 using Libreria1.Interfaces;
 using Libreria1.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreria1.Controllers
@@ -67,6 +68,7 @@ namespace Libreria1.Controllers
         }
 
         // POST: api/prestamos
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(PrestamoDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
