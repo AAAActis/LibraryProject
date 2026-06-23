@@ -12,6 +12,11 @@ using Npgsql;
 using Libreria1;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
@@ -70,9 +75,26 @@ builder.Services.AddDbContext<LibreriaContext>(options =>
            .LogTo(Console.WriteLine, LogLevel.Information);
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            // Aquí lee la clave secreta desde tu appsettings.json
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "TuClaveSecretaSuperSeguraDe32CaracteresMinimo")),
+            ValidateIssuer = false, // Cambiar a true si defines un Issuer
+            ValidateAudience = false, // Cambiar a true si defines un Audience
+            ClockSkew = TimeSpan.Zero // Evita el margen de gracia de 5 min al vencer el token
+        };
+    });
+
+
 var app = builder.Build();
 
-
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 /*INICIO DEL TEST DE CONEXIÓN A POSTGRESQL(Se comenta porque se realizo para una prueba puntual y no es necesario que se ejecute cada vez que se inicia la API)
 var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 
