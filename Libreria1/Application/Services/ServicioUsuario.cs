@@ -41,6 +41,11 @@ namespace Libreria1.Application.Services
         return usuario;
     }
 
+    public Usuario? BuscarPorEmail(string email)
+        {
+            return _repositorio.ObtenerTodos().FirstOrDefault(u => u.Email == email);
+        }
+
     public Usuario? BuscarPorId(Guid id)
     {
         return _repositorio.ObtenerPorId(id);

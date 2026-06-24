@@ -8,6 +8,8 @@ namespace Libreria1.Application.Interfaces
 
         // Busca por número de socio (1,2,3...) y devuelve la entidad o lanza excepción si no existe
         Usuario BuscarPorNumeroSocio(int nroSocio);
+        // Busca por email y devuelve la entidad o lanza excepción si no existe
+        Usuario BuscarPorEmail(string email);
 
         // Busca por Id (Guid)
         Usuario? BuscarPorId(Guid id);
