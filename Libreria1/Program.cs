@@ -19,7 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddUserSecrets<Program>();
+builder.Configuration.AddUserSecrets<Program>(); 
 var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
