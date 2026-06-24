@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddUserSecrets<Program>();
 var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
@@ -87,7 +88,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             // Aquí lee la clave secreta desde tu appsettings.json
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Falta la clave secreta en appsettings.json"))),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt")["Key"] ?? throw new InvalidOperationException("Falta la clave secreta"))),
             ValidateIssuer = false, // Cambiar a true si defines un Issuer
             ValidateAudience = false, // Cambiar a true si defines un Audience
             ClockSkew = TimeSpan.Zero // Evita el margen de gracia de 5 min al vencer el token
@@ -98,7 +99,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 app.UseRouting();
-app.UseCors("DesarrolloLocal");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
