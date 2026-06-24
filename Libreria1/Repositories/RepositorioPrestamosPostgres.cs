@@ -217,12 +217,12 @@ public IEnumerable<Prestamo> ObtenerPorUsuario(Guid usuarioId)
             throw new NotImplementedException();
         }
 
-        object IRepositorio<Prestamo, Guid>.ObtenerMultasAgrupadasPorUsuario()
+        IEnumerable<Multa> IRepositorio<Prestamo, Guid>.ObtenerMultasAgrupadasPorUsuario()
         {
             return ObtenerMultasAgrupadasPorUsuario();
         }
 
-        object IRepositorio<Prestamo, Guid>.UsuariosConPrestamosActivos()
+        IEnumerable<Usuario> IRepositorio<Prestamo, Guid>.UsuariosConPrestamosActivos()
         {
             return UsuariosConPrestamosActivos();
         }

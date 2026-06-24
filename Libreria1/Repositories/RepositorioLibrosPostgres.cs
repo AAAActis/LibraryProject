@@ -128,15 +128,7 @@ namespace Libreria1.Repositories
             throw new NotImplementedException();
         }
 
-        object IRepositorio<Libro, string>.ObtenerMultasAgrupadasPorUsuario()
-        {
-            return ObtenerMultasAgrupadasPorUsuario();
-        }
-
-        object IRepositorio<Libro, string>.UsuariosConPrestamosActivos()
-        {
-            return UsuariosConPrestamosActivos();
-        }
+        
     }
 
 }

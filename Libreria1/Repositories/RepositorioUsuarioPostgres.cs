@@ -135,12 +135,12 @@ namespace Libreria1.Repositories
             throw new NotImplementedException();
         }
 
-        object IRepositorio<Usuario, Guid>.ObtenerMultasAgrupadasPorUsuario()
+        IEnumerable<Multa> IRepositorio<Usuario, Guid>.ObtenerMultasAgrupadasPorUsuario()
         {
             return ObtenerMultasAgrupadasPorUsuario();
         }
 
-        object IRepositorio<Usuario, Guid>.UsuariosConPrestamosActivos()
+        IEnumerable<Usuario> IRepositorio<Usuario, Guid>.UsuariosConPrestamosActivos()
         {
             return UsuariosConPrestamosActivos();
         }
