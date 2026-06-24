@@ -67,8 +67,10 @@ public class RepositorioLibroEF : IRepositorio<Libro, string>
         throw new NotImplementedException();
     }
 
-    object IRepositorio<Libro, string>.UsuariosConPrestamosActivos()
+
+
+    IEnumerable<Multa> IRepositorio<Libro, string>.ObtenerMultasAgrupadasPorUsuario()
     {
-        return UsuariosConPrestamosActivos();
+        throw new NotImplementedException();
     }
 }

@@ -8,14 +8,13 @@ namespace Libreria1.Repositories;
 public class RepositorioUsuariosEF : IRepositorio<Usuario, Guid>
 {
     private readonly LibreriaContext _context;
-    private readonly Prestamo prestamo;
 
     public RepositorioUsuariosEF(LibreriaContext context)
     {
         _context = context;
     }
 
-    public object UsuariosConPrestamosActivos()
+    public IEnumerable<Usuario> UsuariosConPrestamosActivos()
     {
         return _context.Usuarios
             .Include(u => u.Prestamos)
@@ -62,14 +61,13 @@ public class RepositorioUsuariosEF : IRepositorio<Usuario, Guid>
         }
     }
 
+    public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Libro> ObtenerLibrosMasPrestados()
     {
         throw new NotImplementedException();
     }
-
-    public object ObtenerMultasAgrupadasPorUsuario()
-    {
-        throw new NotImplementedException();
-    }
-
 }
