@@ -6,16 +6,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Libreria1.Domain.Entities;
 public class Usuario : IEntidad<Guid>
 {
-    private static int _contador = 1;
     public int NroSocio {get; private set;}
-    [Key]
+
     public Guid Id {get; private set;}
     public string Nombre {get; private set;}
     public string Apellido {get; private set;}
     public string Email {get; private set;}
     public DateTime FechaRegistro {get; private set;}
+    public enum Rol { Administrador, Socio }
 
-    [InverseProperty("UsuarioAsignado")]
+    public Rol TipoRol { get; private set; }
+
     public ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
 
     protected Usuario() { } // Constructor protegido para EF Core
@@ -27,10 +28,6 @@ public class Usuario : IEntidad<Guid>
     Apellido = apellido;
     Email = email;
     FechaRegistro = DateTime.Now; // Fecha actual
-    
-    // Acá le asignás el número de socio según la lógica que uses 
-    // (puede ser un Random, autoincremental en la BD, o empezar en 0)
-    NroSocio = 0; 
     }   
 
     internal Usuario(Guid id, string nombre, int nroSocio, string apellido, string email, DateTime fechaRegistro)
