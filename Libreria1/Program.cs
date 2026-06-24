@@ -30,6 +30,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IRepositorio<Libro, string>, RepositorioLibroEF>();
 builder.Services.AddScoped<IRepositorio<Usuario, Guid>, RepositorioUsuariosEF>();
 builder.Services.AddScoped<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
+builder.Services.AddScoped<IRepositorio<Prestamo, Guid>, RepositorioPrestamosEF>();
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
 builder.Services.AddScoped<ICatalogo<Libro>, ServicioCatalogo>();
@@ -37,12 +38,6 @@ builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
 
-//Registramos LibreriaContext
-builder.Services.AddDbContext<LibreriaContext>(opt => 
-{
-    // Usamos la connection string que apunta a la IP de Tailscale de Santi
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 builder.Services.AddSwaggerGen(opciones =>
 {
@@ -67,6 +62,16 @@ builder.Services.AddSwaggerGen(opciones =>
 
 }); // Agrega Swagger para documentación de la API
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DesarrolloLocal", policy =>
+    {
+        policy.WithOrigins("http://localhost:5000", "https://localhost:7001")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddDbContext<LibreriaContext>(options =>
 {
     //Usa PostgreSQL y lee la cadena de conexión de appsettings.json
@@ -82,7 +87,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             // Aquí lee la clave secreta desde tu appsettings.json
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "TuClaveSecretaSuperSeguraDe32CaracteresMinimo")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Falta la clave secreta en appsettings.json"))),
             ValidateIssuer = false, // Cambiar a true si defines un Issuer
             ValidateAudience = false, // Cambiar a true si defines un Audience
             ClockSkew = TimeSpan.Zero // Evita el margen de gracia de 5 min al vencer el token
@@ -93,29 +98,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 app.UseRouting();
+app.UseCors("DesarrolloLocal");
 app.UseAuthentication();
 app.UseAuthorization();
-/*INICIO DEL TEST DE CONEXIÓN A POSTGRESQL(Se comenta porque se realizo para una prueba puntual y no es necesario que se ejecute cada vez que se inicia la API)
-var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
 
-using (var connection = new NpgsqlConnection(connectionString))
-{
-    try
-    {
-        Console.WriteLine("Intentando conectar a la base de datos...");
-        connection.Open(); // Si las credenciales o el puerto estan mal, esto lanza una excepción
-        Console.WriteLine("La API se conectó a PostgreSQL correctamente.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"ERROR DE CONEXIÓN: {ex.Message}");
-    }
-}
-*/
-
-
-//se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
-//app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
