@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Libreria1.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20260619003548_AgregarRelaciones")]
-    partial class AgregarRelaciones
+    [Migration("20260624021231_ConsolidarRefactorDominio")]
+    partial class ConsolidarRefactorDominio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,7 +129,14 @@ namespace Libreria1.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("NroSocio")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NroSocio"));
+
+                    b.Property<string>("TipoRol")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -150,13 +157,13 @@ namespace Libreria1.Migrations
             modelBuilder.Entity("Libreria1.Domain.Entities.Prestamo", b =>
                 {
                     b.HasOne("Libreria1.Domain.Entities.Libro", "LibroPrestado")
-                        .WithMany()
+                        .WithMany("Prestamos")
                         .HasForeignKey("LibroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Libreria1.Domain.Entities.Usuario", "UsuarioAsignado")
-                        .WithMany()
+                        .WithMany("Prestamos")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -164,6 +171,16 @@ namespace Libreria1.Migrations
                     b.Navigation("LibroPrestado");
 
                     b.Navigation("UsuarioAsignado");
+                });
+
+            modelBuilder.Entity("Libreria1.Domain.Entities.Libro", b =>
+                {
+                    b.Navigation("Prestamos");
+                });
+
+            modelBuilder.Entity("Libreria1.Domain.Entities.Usuario", b =>
+                {
+                    b.Navigation("Prestamos");
                 });
 #pragma warning restore 612, 618
         }

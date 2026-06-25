@@ -52,14 +52,10 @@ namespace Libreria1.Repositories
             return ObtenerMultasAgrupadasPorUsuario();
         }
 
-        object IRepositorio<T, TId>.ObtenerMultasAgrupadasPorUsuario()
-        {
-            return ObtenerMultasAgrupadasPorUsuario();
-        }
 
-        object IRepositorio<T, TId>.UsuariosConPrestamosActivos()
+        IEnumerable<Multa> IRepositorio<T, TId>.ObtenerMultasAgrupadasPorUsuario()
         {
-            return UsuariosConPrestamosActivos();
+            throw new NotImplementedException();
         }
     }
 }

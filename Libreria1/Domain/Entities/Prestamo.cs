@@ -6,18 +6,18 @@ namespace Libreria1.Domain.Entities;
 public class Prestamo : IEntidad<Guid>
 {
     
-    [Key]
+
     public Guid Id { get; private set; } = Guid.NewGuid();
 
     // Claves foráneas explícitas
     public string LibroId { get; private set; }
     public Guid UsuarioId { get; private set; }
 
-    // Propiedades de navegación atadas a las FK
-    [ForeignKey("LibroId")]
+
+
     public Libro LibroPrestado { get; private set; }
 
-    [ForeignKey("UsuarioId")]
+
     public Usuario UsuarioAsignado { get; private set; }
     
     public DateTime FechaPrestamo { get; private set; }
