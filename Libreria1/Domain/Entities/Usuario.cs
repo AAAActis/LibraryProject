@@ -30,7 +30,7 @@ public class Usuario : IEntidad<Guid>
     Apellido = apellido;
     Email = email;
     PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
-    FechaRegistro = DateTime.Now; // Fecha actual
+    FechaRegistro = DateTime.UtcNow; // Fecha actual
     }   
 
     internal Usuario(Guid id, string nombre, int nroSocio, string apellido, string email, DateTime fechaRegistro)

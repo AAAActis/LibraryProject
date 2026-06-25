@@ -106,7 +106,7 @@ namespace Libreria1.API.Controllers
         {
 
                 var usuario = _servicioUsuario.RegistrarUsuario(
-                    dto.Nombre, dto.Apellido, dto.Email
+                    dto.Nombre, dto.Apellido, dto.Email, dto.Password
                 );
                 var usuarioDto = new UsuarioDto
                 {

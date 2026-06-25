@@ -37,4 +37,10 @@ public class CrearUsuarioDto
     /// <example>99123456</example>
     [Required(ErrorMessage = "El documento es obligatorio.")]
     public string? Documento { get; set; }
+    /// <summary>
+    /// Contraseña del usuario.
+    /// </summary>
+    /// <example>password123</example>
+    [Required(ErrorMessage = "La contraseña es obligatoria.")]
+    public string? Password { get; set; }
 }

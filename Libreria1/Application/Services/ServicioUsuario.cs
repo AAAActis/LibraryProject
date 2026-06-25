@@ -17,7 +17,7 @@ namespace Libreria1.Application.Services
         _repositorio = repositorio;
     }
 
-    public Usuario RegistrarUsuario(string nombre, string apellido, string email)
+    public Usuario RegistrarUsuario(string nombre, string apellido, string email, string password)
     {
         //verificar si email existe
         var existeEmail = _repositorio.ObtenerTodos()
@@ -26,7 +26,7 @@ namespace Libreria1.Application.Services
         {
             throw new UsuarioYaExisteException($"El email {email} ya está registrado.");
         }
-        var nuevoUsuario = new Usuario(nombre, apellido, email);
+        var nuevoUsuario = new Usuario(nombre, apellido, email, password);
         _repositorio.Agregar(nuevoUsuario);
         return nuevoUsuario;
     }
