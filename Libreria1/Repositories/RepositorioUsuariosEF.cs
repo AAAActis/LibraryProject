@@ -26,12 +26,15 @@ public class RepositorioUsuariosEF : IRepositorio<Usuario, Guid>
     {
         return _context.Usuarios
             .OrderBy(u => u.NroSocio)
+            .AsNoTracking()
             .ToList();
     }
 
     public Usuario? ObtenerPorId(Guid id)
     {
-        return _context.Usuarios.FirstOrDefault(u => u.Id == id);
+        return _context.Usuarios
+        .AsNoTracking()
+        .FirstOrDefault(u => u.Id == id);
     }
 
     public Usuario? BuscarPorEmail(string email)

@@ -26,12 +26,16 @@ public class RepositorioLibroEF : IRepositorio<Libro, string>
     }
     public IEnumerable<Libro> ObtenerTodos()
     {
-        return _context.Libros.ToList();
+        return _context.Libros
+                .AsNoTracking()
+                .ToList();
     }
 
-    public Libro ObtenerPorId(string isbn)
+    public Libro? ObtenerPorId(string isbn)
     {
-        return _context.Libros.FirstOrDefault(l => l.Isbn == isbn);
+        return _context.Libros
+                .AsNoTracking()
+                .FirstOrDefault(l => l.Isbn == isbn);
     }
 
     public void Agregar(Libro libro)

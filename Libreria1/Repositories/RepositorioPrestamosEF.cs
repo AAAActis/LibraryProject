@@ -23,6 +23,7 @@ public class RepositorioPrestamosEF : IRepositorio<Prestamo, Guid>
         public Prestamo? ObtenerPorId(Guid id)
         {
             return _context.Prestamos
+                .AsNoTracking()
                 .Include(p => p.LibroPrestado)
                 .Include(p => p.UsuarioAsignado)
                 .FirstOrDefault(p => p.Id == id);
@@ -47,6 +48,7 @@ public class RepositorioPrestamosEF : IRepositorio<Prestamo, Guid>
     public IEnumerable<Prestamo> ObtenerTodos()
     {
         return _context.Prestamos
+                .AsNoTracking()
                 .Include(p => p.LibroPrestado)
                 .Include(p => p.UsuarioAsignado)
                 .ToList();
