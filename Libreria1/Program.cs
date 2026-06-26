@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>(); 
@@ -63,6 +64,8 @@ builder.Services.AddSwaggerGen(opciones =>
 
 }); // Agrega Swagger para documentación de la API
 
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DesarrolloLocal", policy =>
@@ -71,6 +74,12 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+});
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+    options.HttpsPort = 7001; // Forzamos el salto a tu puerto seguro
 });
 
 builder.Services.AddDbContext<LibreriaContext>(options =>
@@ -98,14 +107,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseRouting();
+
+app.UseCors("DesarrolloLocal");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
-app.UseSwagger();
-app.UseSwaggerUI();
 
 // 4. Conectar las rutas URL con los controladores
 app.MapControllers();
