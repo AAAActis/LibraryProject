@@ -2,6 +2,7 @@
 using Libreria1.Application.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BCrypt.Net;
 
 namespace Libreria1.Domain.Entities;
 public class Usuario : IEntidad<Guid>
@@ -12,6 +13,7 @@ public class Usuario : IEntidad<Guid>
     public string Nombre {get; private set;}
     public string Apellido {get; private set;}
     public string Email {get; private set;}
+    public string PasswordHash {get; private set;} 
     public DateTime FechaRegistro {get; private set;}
     public enum Rol { Administrador, Socio }
 
@@ -21,12 +23,13 @@ public class Usuario : IEntidad<Guid>
 
     protected Usuario() { } // Constructor protegido para EF Core
     
-    public Usuario(string nombre, string apellido, string email)
+    public Usuario(string nombre, string apellido, string email, string password)
     {
     Id = Guid.NewGuid(); // Se genera un ID nuevo
     Nombre = nombre;
     Apellido = apellido;
     Email = email;
+    PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
     FechaRegistro = DateTime.Now; // Fecha actual
     }   
 
@@ -39,4 +42,7 @@ public class Usuario : IEntidad<Guid>
         Email = email;
         FechaRegistro = fechaRegistro;
     }
+
+    public bool VerificarPassword(string password)
+    => BCrypt.Net.BCrypt.Verify(password, PasswordHash);
 }
