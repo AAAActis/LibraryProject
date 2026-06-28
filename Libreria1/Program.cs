@@ -39,6 +39,7 @@ builder.Services.AddScoped<ICatalogo<Libro>, ServicioCatalogo>();
 builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
+builder.Services.AddScoped<IServicioToken, ServicioToken>();
 
 
 builder.Services.AddSwaggerGen(opciones =>
