@@ -9,10 +9,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Libreria1.Domain.Entities;
 public class Libro : IEntidad<string>
 {
-    [NotMapped]
     public string Id => Isbn; // Mapeo directo a la PK real
     
-    [Key]
+
     public string Isbn { get; private set; }
     public string Titulo { get; private set; }
     public string Autor { get; private set; }
@@ -20,7 +19,6 @@ public class Libro : IEntidad<string>
     public int CantPaginas { get; private set; }
     public bool EstaDisponible { get; set; }
     
-    [InverseProperty("LibroPrestado")]
     public ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
 
     protected Libro() { } // Constructor protegido para EF Core

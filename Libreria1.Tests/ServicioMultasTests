@@ -1,0 +1,64 @@
+using Moq;
+using Xunit;
+using System;
+using Libreria1.Application.Services;
+using Libreria1.Interfaces;
+using Libreria1.Domain.Entities;
+
+namespace Libreria1.Tests.Services
+{
+    public class ServicioMultasTests
+    {
+        [Fact]
+        public void CalcularMulta_ConRetraso_GeneraMultaYLlamaAlRepo()
+        {
+            // 1. ARRANGE
+            var mockRepoMultas = new Mock<IRepositorio<Multa, Guid>>();
+            var servicioMultas = new ServicioMultas(mockRepoMultas.Object);
+
+            // Simulamos un préstamo vencido hace 5 días
+            var prestamoVencido = new Prestamo();
+            prestamoVencido.FechaDevolucion = DateTime.Now.AddDays(-5);
+
+            // 2. ACT
+            var resultado = servicioMultas.CalcularMulta(prestamoVencido);
+
+            // 3. ASSERT
+            Assert.NotNull(resultado);
+            // Verificamos que el servicio intentó guardar la multa en la base de datos (1 sola vez)
+            mockRepoMultas.Verify(repo => repo.Agregar(It.IsAny<Multa>()), Times.Once);
+        }
+
+        [Fact]
+        public void CalcularMulta_EnTermino_RetornaNullYNoGuarda()
+        {
+            // 1. ARRANGE
+            var mockRepoMultas = new Mock<IRepositorio<Multa, Guid>>();
+            var servicioMultas = new ServicioMultas(mockRepoMultas.Object);
+
+            // Simulamos un préstamo que vence en el futuro (faltan 5 días)
+            var prestamoEnTermino = new Prestamo();
+            prestamoEnTermino.FechaDevolucion = DateTime.Now.AddDays(5);
+
+            // 2. ACT
+            var resultado = servicioMultas.CalcularMulta(prestamoEnTermino);
+
+            // 3. ASSERT
+            Assert.Null(resultado);
+            // Verificamos que el servicio NUNCA intentó guardar nada
+            mockRepoMultas.Verify(repo => repo.Agregar(It.IsAny<Multa>()), Times.Never);
+        }
+
+        [Fact]
+        public void CalcularMulta_PrestamoNull_LanzaExcepcion()
+        {
+            // 1. ARRANGE
+            var mockRepoMultas = new Mock<IRepositorio<Multa, Guid>>();
+            var servicioMultas = new ServicioMultas(mockRepoMultas.Object);
+
+            // 2 & 3. ACT & ASSERT
+            // Verificamos que si pasamos null, el sistema frene y tire tu excepción personalizada
+            Assert.Throws<PrestamoNoEncontradoException>(() => servicioMultas.CalcularMulta(null));
+        }
+    }
+}

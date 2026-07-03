@@ -12,8 +12,15 @@ using Npgsql;
 using Libreria1;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddUserSecrets<Program>(); 
 var cadena = builder.Configuration.GetConnectionString("Libreria") ?? throw new InvalidOperationException("Falta la cadena de conexión en appsettings.json");
 
 // 1. Habilitar controladores
@@ -25,19 +32,15 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IRepositorio<Libro, string>, RepositorioLibroEF>();
 builder.Services.AddScoped<IRepositorio<Usuario, Guid>, RepositorioUsuariosEF>();
 builder.Services.AddScoped<IRepositorio<Multa, Guid>, RepositorioMultasEF>(); // Multas se guardan en memoria porque son temporales y no críticas
+builder.Services.AddScoped<IRepositorio<Prestamo, Guid>, RepositorioPrestamosEF>();
 
 // 3. Inyección de Servicios (Scoped: nacen y mueren con cada petición HTTP)
 builder.Services.AddScoped<ICatalogo<Libro>, ServicioCatalogo>();
 builder.Services.AddScoped<IUsuarios, ServicioUsuario>();
 builder.Services.AddScoped<IServicioMulta, ServicioMultas>();
 builder.Services.AddScoped<ServicioPrestamo>();
+builder.Services.AddScoped<IServicioToken, ServicioToken>();
 
-//Registramos LibreriaContext
-builder.Services.AddDbContext<LibreriaContext>(opt => 
-{
-    // Usamos la connection string que apunta a la IP de Tailscale de Santi
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 builder.Services.AddSwaggerGen(opciones =>
 {
@@ -62,6 +65,24 @@ builder.Services.AddSwaggerGen(opciones =>
 
 }); // Agrega Swagger para documentación de la API
 
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DesarrolloLocal", policy =>
+    {
+        policy.WithOrigins("http://localhost:5000", "https://localhost:7001")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+    options.HttpsPort = 7001; // Forzamos el salto a tu puerto seguro
+});
+
 builder.Services.AddDbContext<LibreriaContext>(options =>
 {
     //Usa PostgreSQL y lee la cadena de conexión de appsettings.json
@@ -70,33 +91,37 @@ builder.Services.AddDbContext<LibreriaContext>(options =>
            .LogTo(Console.WriteLine, LogLevel.Information);
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            // Aquí lee la clave secreta desde tu appsettings.json
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt")["Key"] ?? throw new InvalidOperationException("Falta la clave secreta"))),
+            ValidateIssuer = false, // Cambiar a true si defines un Issuer
+            ValidateAudience = false, // Cambiar a true si defines un Audience
+            ClockSkew = TimeSpan.Zero // Evita el margen de gracia de 5 min al vencer el token
+        };
+    });
+
+
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 
-/*INICIO DEL TEST DE CONEXIÓN A POSTGRESQL(Se comenta porque se realizo para una prueba puntual y no es necesario que se ejecute cada vez que se inicia la API)
-var connectionString = "Host=localhost;Port=5432;Database=libreria;Username=postgres;Password=1234;";
-
-using (var connection = new NpgsqlConnection(connectionString))
+if (app.Environment.IsDevelopment())
 {
-    try
-    {
-        Console.WriteLine("Intentando conectar a la base de datos...");
-        connection.Open(); // Si las credenciales o el puerto estan mal, esto lanza una excepción
-        Console.WriteLine("La API se conectó a PostgreSQL correctamente.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"ERROR DE CONEXIÓN: {ex.Message}");
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-*/
 
+app.UseRouting();
 
-//se habilita el middleware de manejo de excepciones personalizado para toda la aplicación
-//app.UseMiddleware<Libreria1.Presentation.Middleware.ExceptionHandlerMiddLeware>();
+app.UseCors("DesarrolloLocal");
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // 4. Conectar las rutas URL con los controladores
 app.MapControllers();

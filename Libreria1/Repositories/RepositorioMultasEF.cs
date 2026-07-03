@@ -95,9 +95,9 @@ namespace Libreria1.Repositories
             throw new NotImplementedException();
         }
 
-        object IRepositorio<Multa, Guid>.UsuariosConPrestamosActivos()
+        IEnumerable<Multa> IRepositorio<Multa, Guid>.ObtenerMultasAgrupadasPorUsuario()
         {
-            return UsuariosConPrestamosActivos();
+            throw new NotImplementedException();
         }
     }
 }

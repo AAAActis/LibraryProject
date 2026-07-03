@@ -7,6 +7,7 @@ using Libreria1.Interfaces;
 using Libreria1.Domain.Entities;
 using Libreria1.Application.DTOs;
 using Libreria1.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Libreria1.Controllers
 {
@@ -39,6 +40,7 @@ namespace Libreria1.Controllers
             }
         }
         // GET /api/libros
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LibroDto>), StatusCodes.Status200OK)]
         public IActionResult ObtenerTodos()
@@ -87,6 +89,7 @@ namespace Libreria1.Controllers
         }
 
         // POST /api/libros
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         [ProducesResponseType(typeof(LibroDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -127,6 +130,7 @@ namespace Libreria1.Controllers
         
 
         // DELETE /api/libros/{isbn}
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("{isbn}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
