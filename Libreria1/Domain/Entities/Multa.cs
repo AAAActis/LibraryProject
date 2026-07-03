@@ -27,7 +27,7 @@ public class Multa : IEntidad<Guid>
     {
         PrestamoAsignado = prestamoId;
         DiasRetraso = diasRetraso;
-        FechaGenerada = DateTime.Now;
+        FechaGenerada = DateTime.UtcNow; // UTC: la columna es "timestamp with time zone" (Npgsql exige Kind=Utc)
         // Calcula el monto de la multa basado en los días de retraso y la tarifa diaria.
         MontoMulta = CalcularMontoMulta(diasRetraso);
     }

@@ -45,6 +45,7 @@ namespace Libreria1.API.Controllers
             var dtos = usuarios.Select(u => new UsuarioDto
             {
                 Id = u.Id,           // ← propiedad directa, no método
+                NroSocio = u.NroSocio,
                 Nombre = u.Nombre,
                 Apellido = u.Apellido,
                 Email = u.Email      // ← propiedad directa, no método
@@ -65,6 +66,7 @@ namespace Libreria1.API.Controllers
             var dto = new UsuarioDto
             {
                 Id = usuario.Id,
+                NroSocio = usuario.NroSocio,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Email = usuario.Email
@@ -72,7 +74,7 @@ namespace Libreria1.API.Controllers
             return Ok(dto);
         }
 
-    
+
     //GET api/usuarios/usuarios/{nroSocio}
         [HttpGet("socio/{nroSocio}")]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
@@ -85,6 +87,7 @@ namespace Libreria1.API.Controllers
                 var dto = new UsuarioDto
                 {
                     Id = usuario.Id,
+                    NroSocio = usuario.NroSocio,
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Email = usuario.Email
@@ -111,6 +114,7 @@ namespace Libreria1.API.Controllers
                 var usuarioDto = new UsuarioDto
                 {
                     Id = usuario.Id,
+                    NroSocio = usuario.NroSocio,
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Email = usuario.Email

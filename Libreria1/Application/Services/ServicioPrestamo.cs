@@ -78,6 +78,9 @@ public class ServicioPrestamo
 
         var libro = catalogo.BuscarLibroPorIsbn(isbnLibro);
         libro.MarcarDevuelto();
+
+        // Persiste el préstamo (Activo=false) junto con el libro asociado (EstaDisponible=true).
+        _repositorioPrestamos.Actualizar(prestamo);
         return prestamo;
     }
 
@@ -99,6 +102,11 @@ public class ServicioPrestamo
         return _repositorioPrestamos.ObtenerTodos()
         .Where(p => p.Activo)
         .ToList();
+    }
+
+    public List<Prestamo> ListarTodos()
+    {
+        return _repositorioPrestamos.ObtenerTodos().ToList();
     }
 
     public List<Prestamo> ListarPrestamosPorUsuario(int nroSocio)

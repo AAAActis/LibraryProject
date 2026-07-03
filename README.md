@@ -38,3 +38,22 @@ cd LibraryProject
    dotnet ef database update
 5. **Ejecutar la Aplicación:**
    dotnet run
+
+## 🖥️ Frontend (Next.js)
+
+El frontend vive en `frontend/` (Next.js 16, App Router). Se integra con la API de dos formas:
+
+**Desarrollo (dos procesos, hot reload):**
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:3000, pega a http://localhost:5000 (CORS ya habilitado)
+```
+
+**Producción (un solo proceso, el backend sirve el frontend como estático):**
+```bash
+.\build.ps1         # build estático de Next + copia a Libreria1/wwwroot
+dotnet run --project Libreria1
+# abrir http://localhost:5000 (o el puerto/host donde se despliegue)
+```
+En este modo el frontend usa rutas relativas (`/api/...`), por lo que no depende de CORS ni de conocer el host en build time.

@@ -12,6 +12,12 @@ public class UsuarioDto
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Número de socio del usuario, usado para préstamos y multas.
+    /// </summary>
+    /// <example>1024</example>
+    public int NroSocio { get; set; }
+
+    /// <summary>
     /// Nombre del usuario.
     /// </summary>
     /// <example>Juan</example>

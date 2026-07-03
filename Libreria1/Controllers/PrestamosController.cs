@@ -41,6 +41,29 @@ namespace Libreria1.Controllers
             }
         }
 
+        // GET: api/prestamos
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(typeof(List<PrestamoListadoDto>), StatusCodes.Status200OK)]
+        public ActionResult<List<PrestamoListadoDto>> ListarTodos()
+        {
+            var prestamos = _servicioPrestamo.ListarTodos();
+
+            var prestamosDto = prestamos.Select(p => new PrestamoListadoDto
+            {
+                Id = p.Id,
+                LibroIsbn = p.LibroPrestado.Isbn,
+                LibroTitulo = p.LibroPrestado.Titulo,
+                NroSocio = p.UsuarioAsignado.NroSocio,
+                UsuarioNombre = $"{p.UsuarioAsignado.Nombre} {p.UsuarioAsignado.Apellido}",
+                FechaPrestamo = p.FechaPrestamo,
+                FechaDevolucion = p.FechaDevolucion,
+                Activo = p.Activo
+            }).ToList();
+
+            return Ok(prestamosDto);
+        }
+
         // GET: api/prestamos/usuario/{nroSocio}
         [HttpGet("usuario/{nroSocio}")]
         [ProducesResponseType(typeof(List<PrestamoDto>), StatusCodes.Status200OK)]

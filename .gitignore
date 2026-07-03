@@ -39,3 +39,6 @@ Thumbs.db
 
 # Appsettings (Evita subir cadenas de conexión o secretos)
 appsettings.Development.json
+
+# Build del frontend copiado por build.ps1 para que el backend lo sirva como estático
+Libreria1/wwwroot/

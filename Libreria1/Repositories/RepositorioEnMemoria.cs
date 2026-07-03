@@ -17,6 +17,16 @@ namespace Libreria1.Repositories
             _datos.Add(entidad);
         }
 
+        public void Actualizar(T entidad)
+        {
+            var existente = ObtenerPorId(entidad.Id);
+            if (existente != null)
+            {
+                _datos.Remove(existente);
+            }
+            _datos.Add(entidad);
+        }
+
         public T? ObtenerPorId(TId id)
         {
             // EqualityComparer es a prueba de fallos para tipos genéricos

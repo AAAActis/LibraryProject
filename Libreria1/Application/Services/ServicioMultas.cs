@@ -18,9 +18,10 @@ public ServicioMultas(IRepositorio<Multa, Guid> repositorioMultas)
     {
        if (prestamo == null) throw new PrestamoNoEncontradoException("Préstamo no encontrado");
     
-    if (prestamo.FechaDevolucion.HasValue && DateTime.Now > prestamo.FechaDevolucion.Value)
+    // FechaDevolucion se guarda en UTC (columna "timestamp with time zone"); comparar contra UtcNow evita un desfase de huso horario.
+    if (prestamo.FechaDevolucion.HasValue && DateTime.UtcNow > prestamo.FechaDevolucion.Value)
     {
-        var diasRetraso = (DateTime.Now - prestamo.FechaDevolucion.Value).Days;
+        var diasRetraso = (DateTime.UtcNow - prestamo.FechaDevolucion.Value).Days;
         if (diasRetraso > 0)
         {
             // Respeta tu diseño: le pasás el objeto entero

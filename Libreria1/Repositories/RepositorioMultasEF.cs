@@ -36,7 +36,23 @@ namespace Libreria1.Repositories
 
         public void Agregar(Multa entidad)
         {
+            // El Prestamo (y su Libro/Usuario) llegan desconectados desde ServicioMultas
+            // (AsNoTracking en los repos de origen). Sin adjuntarlos, EF Core los trata
+            // como entidades nuevas al hacer Add(...) e intenta re-insertarlos, violando
+            // la PK ya existente en la fila real.
+            if (entidad.PrestamoAsignado != null)
+            {
+                _context.Entry(entidad.PrestamoAsignado).State = EntityState.Unchanged;
+                _context.Entry(entidad.PrestamoAsignado.LibroPrestado).State = EntityState.Unchanged;
+                _context.Entry(entidad.PrestamoAsignado.UsuarioAsignado).State = EntityState.Unchanged;
+            }
             _context.Set<Multa>().Add(entidad);
+            _context.SaveChanges();
+        }
+
+        public void Actualizar(Multa entidad)
+        {
+            _context.Set<Multa>().Update(entidad);
             _context.SaveChanges();
         }
 
@@ -54,6 +70,9 @@ namespace Libreria1.Repositories
         {
             return _context.Set<Multa>()
                 .Include(m => m.PrestamoAsignado)
+                    .ThenInclude(p => p.LibroPrestado)
+                .Include(m => m.PrestamoAsignado)
+                    .ThenInclude(p => p.UsuarioAsignado)
                 .ToList();
         }
 

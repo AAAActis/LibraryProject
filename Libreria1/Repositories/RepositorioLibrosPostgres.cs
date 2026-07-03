@@ -102,8 +102,30 @@ namespace Libreria1.Repositories
             command.ExecuteNonQuery();
         }
 
+        // UPDATE: UPDATE libros SET ... WHERE isbn = @isbn
+        public void Actualizar(Libro libro)
+        {
+            const string query = @"
+                UPDATE libros
+                SET titulo = @titulo, autor = @autor, año_publicacion = @ano, cant_paginas = @pags, esta_disponible = @esta_disponible
+                WHERE isbn = @isbn";
+
+            using var connection = new NpgsqlConnection(_connectionString);
+            using var command = new NpgsqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@isbn", libro.Isbn);
+            command.Parameters.AddWithValue("@titulo", libro.Titulo);
+            command.Parameters.AddWithValue("@autor", libro.Autor);
+            command.Parameters.AddWithValue("@ano", libro.AñoPublicacion);
+            command.Parameters.AddWithValue("@pags", libro.CantPaginas);
+            command.Parameters.AddWithValue("@esta_disponible", libro.EstaDisponible);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+
         // DELETE: DELETE FROM libros WHERE isbn = @isbn
-        public void Eliminar(string id)   
+        public void Eliminar(string id)
         {
             const string query = "DELETE FROM libros WHERE isbn = @isbn";
             using var connection = new NpgsqlConnection(_connectionString);
