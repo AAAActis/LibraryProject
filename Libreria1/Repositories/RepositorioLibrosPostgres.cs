@@ -145,7 +145,7 @@ namespace Libreria1.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+        public object ObtenerMultasAgrupadasPorUsuario()
         {
             throw new NotImplementedException();
         }

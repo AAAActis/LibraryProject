@@ -69,8 +69,15 @@ namespace Libreria1.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult ObtenerPorIsbn(string isbn)
         {
-
-                var libro = _catalogo.BuscarLibroPorIsbn(isbn);
+                Libro? libro;
+                try
+                {
+                    libro = _catalogo.BuscarLibroPorIsbn(isbn);
+                }
+                catch (LibroNoEncontradoException)
+                {
+                    libro = null;
+                }
 
                 if (libro == null)
                 {
@@ -143,8 +150,15 @@ namespace Libreria1.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult EliminarLibro(string isbn)
         {
-
-                var libro = _catalogo.BuscarLibroPorIsbn(isbn);
+                Libro? libro;
+                try
+                {
+                    libro = _catalogo.BuscarLibroPorIsbn(isbn);
+                }
+                catch (LibroNoEncontradoException)
+                {
+                    libro = null;
+                }
                 if (libro == null)
                 {
                     return NotFound(new { mensaje = $"No se encontró un libro con ISBN {isbn} para eliminar." });

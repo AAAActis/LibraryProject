@@ -99,11 +99,21 @@ namespace Libreria1.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public ActionResult Crear([FromBody] PrestamoDto dto)
         {
-
-                _servicioPrestamo.PrestarLibro(dto.NroSocio, dto.LibroIsbn); 
+                try
+                {
+                    _servicioPrestamo.PrestarLibro(dto.NroSocio, dto.LibroIsbn);
+                }
+                catch (Exception ex) when (ex is UsuarioNoEncontradoException || ex is LibroNoEncontradoException)
+                {
+                    return NotFound(new { mensaje = ex.Message });
+                }
+                catch (Exception ex) when (ex is LibroNoDisponibleException || ex is LimitePrestamosAlcanzadoException)
+                {
+                    return Conflict(new { mensaje = ex.Message });
+                }
 
                 // devolvemos un 201 Created y redirigimos a la ruta del socio
-                return CreatedAtAction(nameof(ListarPorSocio), new { nroSocio = dto.NroSocio }, new { mensaje = "Préstamo registrado exitosamente." }); 
+                return CreatedAtAction(nameof(ListarPorSocio), new { nroSocio = dto.NroSocio }, new { mensaje = "Préstamo registrado exitosamente." });
 
         }
 
@@ -113,8 +123,15 @@ namespace Libreria1.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult Devolver([FromBody] CrearPrestamoDto dto)
         {
-
-                var prestamoActualizado = _servicioPrestamo.DevolverLibro(dto.UsuarioId, dto.LibroIsbn);
+                Prestamo prestamoActualizado;
+                try
+                {
+                    prestamoActualizado = _servicioPrestamo.DevolverLibro(dto.NroSocio, dto.LibroIsbn);
+                }
+                catch (PrestamoNoEncontradoException ex)
+                {
+                    return NotFound(new { mensaje = ex.Message });
+                }
 
                 var prestamoDto = new PrestamoDto
                 {
@@ -153,13 +170,23 @@ namespace Libreria1.Controllers
 public ActionResult<MultaDto> ConsultarMulta(int nroSocio, string isbnLibro)
 {
 
-        var prestamo = _servicioPrestamo.ObtenerPrestamoEspecifico(nroSocio, isbnLibro);
+        Prestamo? prestamo;
+        try
+        {
+            prestamo = _servicioPrestamo.ObtenerPrestamoEspecifico(nroSocio, isbnLibro);
+        }
+        catch (PrestamoNoEncontradoException)
+        {
+            // ObtenerPrestamoEspecifico lanza esta excepción (en vez de devolver null) cuando no encuentra el préstamo.
+            prestamo = null;
+        }
+
         //VALIDACIÓN SALVAVIDAS: Si no hay préstamo, devolvemos un 404 limpio
         if (prestamo == null)
         {
             return NotFound(new { mensaje = $"No se encontró un préstamo activo del libro {isbnLibro} para el socio {nroSocio}." });
         }
-                
+
         var multa = _servicioMulta.CalcularMulta(prestamo); // Suponiendo que esto lanza excepción si no está vencido
 
         if (multa == null)
