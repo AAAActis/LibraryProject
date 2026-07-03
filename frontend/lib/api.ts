@@ -1,15 +1,21 @@
 // Central API client for the LibraryProject backend.
 //
 // NEXT_PUBLIC_API_URL is baked in at build time:
-//  - sin setear (dev, "npm run dev")        -> apunta a http://localhost:5000
+//  - sin setear (dev, "npm run dev")        -> apunta a https://localhost:7001
 //  - vacío (build de producción, ver build.ps1) -> requests relativas ("/api/...").
 //    Esto es lo que se usa cuando el frontend se sirve desde el propio backend
 //    (mismo origen), sin necesidad de CORS ni de conocer el host en build time.
 //
+// En dev se apunta directo a HTTPS (7001) y no a HTTP (5000): el backend fuerza
+// UseHttpsRedirection antes de UseCors, así que un preflight OPTIONS a :5000
+// recibe un 307 en vez de las cabeceras CORS, y el navegador lo trata como un
+// fallo de red ("No se pudo conectar con el servidor"). Requiere haber corrido
+// una vez `dotnet dev-certs https --trust`.
+//
 // Para authenticated endpoints el JWT se lee de localStorage bajo la key
 // "token" y se manda como header `Authorization: Bearer <token>`.
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000"
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://localhost:7001"
 
 export const TOKEN_KEY = "token"
 
