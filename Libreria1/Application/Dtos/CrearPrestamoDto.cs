@@ -10,6 +10,6 @@ public class CrearPrestamoDto
     [Required(ErrorMessage = "El ISBN del libro es obligatorio.")]
     public string LibroIsbn { get; set; }
 
-    [Required(ErrorMessage = "El ID del usuario es obligatorio.")]
-    public int UsuarioId { get; set; }
+    [Required(ErrorMessage = "El número de socio es obligatorio.")]
+    public int NroSocio { get; set; }
 }

@@ -64,7 +64,7 @@ public class RepositorioUsuariosEF : IRepositorio<Usuario, Guid>
         }
     }
 
-    public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+    public object ObtenerMultasAgrupadasPorUsuario()
     {
         throw new NotImplementedException();
     }

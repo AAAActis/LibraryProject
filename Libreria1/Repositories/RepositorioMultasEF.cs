@@ -113,10 +113,5 @@ namespace Libreria1.Repositories
         {
             throw new NotImplementedException();
         }
-
-        IEnumerable<Multa> IRepositorio<Multa, Guid>.ObtenerMultasAgrupadasPorUsuario()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

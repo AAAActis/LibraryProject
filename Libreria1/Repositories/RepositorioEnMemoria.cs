@@ -57,13 +57,7 @@ namespace Libreria1.Repositories
             throw new NotImplementedException();
         }
 
-        object ObtenerMultasAgrupadasPorUsuario()
-        {
-            return ObtenerMultasAgrupadasPorUsuario();
-        }
-
-
-        IEnumerable<Multa> IRepositorio<T, TId>.ObtenerMultasAgrupadasPorUsuario()
+        public object ObtenerMultasAgrupadasPorUsuario()
         {
             throw new NotImplementedException();
         }

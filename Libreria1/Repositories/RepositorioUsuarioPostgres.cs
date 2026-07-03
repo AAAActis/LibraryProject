@@ -150,19 +150,9 @@ namespace Libreria1.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+        public object ObtenerMultasAgrupadasPorUsuario()
         {
             throw new NotImplementedException();
-        }
-
-        IEnumerable<Multa> IRepositorio<Usuario, Guid>.ObtenerMultasAgrupadasPorUsuario()
-        {
-            return ObtenerMultasAgrupadasPorUsuario();
-        }
-
-        IEnumerable<Usuario> IRepositorio<Usuario, Guid>.UsuariosConPrestamosActivos()
-        {
-            return UsuariosConPrestamosActivos();
         }
     }
 }

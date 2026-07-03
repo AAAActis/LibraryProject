@@ -17,6 +17,6 @@ namespace Libreria1.Interfaces
 
         IEnumerable<Libro> ObtenerLibrosMasPrestados();
         IEnumerable<Usuario> UsuariosConPrestamosActivos();
-        IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario();
+        object ObtenerMultasAgrupadasPorUsuario();
     }
 }

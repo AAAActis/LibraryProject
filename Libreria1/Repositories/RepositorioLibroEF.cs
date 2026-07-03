@@ -70,11 +70,4 @@ public class RepositorioLibroEF : IRepositorio<Libro, string>
     {
         throw new NotImplementedException();
     }
-
-
-
-    IEnumerable<Multa> IRepositorio<Libro, string>.ObtenerMultasAgrupadasPorUsuario()
-    {
-        throw new NotImplementedException();
-    }
 }

@@ -73,7 +73,7 @@ public class RepositorioPrestamosEF : IRepositorio<Prestamo, Guid>
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Multa> ObtenerMultasAgrupadasPorUsuario()
+    public object ObtenerMultasAgrupadasPorUsuario()
     {
         throw new NotImplementedException();
     }

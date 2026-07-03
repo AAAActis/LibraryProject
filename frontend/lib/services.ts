@@ -79,7 +79,7 @@ export function createPrestamo(input: { isbn: string; nroSocio: number }) {
 export function devolverPrestamo(input: { libroIsbn: string; nroSocio: number }) {
   return api.put<{ prestamo: unknown; multa?: Multa }>("/api/prestamos/devolver", {
     libroIsbn: input.libroIsbn,
-    usuarioId: input.nroSocio,
+    nroSocio: input.nroSocio,
   })
 }
 

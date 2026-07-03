@@ -107,10 +107,18 @@ namespace Libreria1.API.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public ActionResult<UsuarioDto> Crear([FromBody] CrearUsuarioDto dto)
         {
+                Usuario usuario;
+                try
+                {
+                    usuario = _servicioUsuario.RegistrarUsuario(
+                        dto.Nombre, dto.Apellido, dto.Email, dto.Password
+                    );
+                }
+                catch (UsuarioYaExisteException ex)
+                {
+                    return Conflict(new { mensaje = ex.Message });
+                }
 
-                var usuario = _servicioUsuario.RegistrarUsuario(
-                    dto.Nombre, dto.Apellido, dto.Email, dto.Password
-                );
                 var usuarioDto = new UsuarioDto
                 {
                     Id = usuario.Id,
