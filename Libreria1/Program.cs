@@ -69,9 +69,15 @@ builder.Services.AddSwaggerGen(opciones =>
 
 builder.Services.AddCors(options =>
 {
+    // Orígenes permitidos configurables por appsettings (Cors:AllowedOrigins).
+    // Con el frontend servido desde el propio backend (mismo origen) esta policy
+    // sólo entra en juego en desarrollo, cuando el frontend corre aparte con "npm run dev".
+    var origenesPermitidos = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+        ?? new[] { "http://localhost:5000", "https://localhost:7001", "http://localhost:3000" };
+
     options.AddPolicy("DesarrolloLocal", policy =>
     {
-        policy.WithOrigins("http://localhost:5000", "https://localhost:7001")
+        policy.WithOrigins(origenesPermitidos)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -116,6 +122,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Sirve el build estático del frontend (Next.js "next export") copiado a wwwroot/.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseCors("DesarrolloLocal");
@@ -125,6 +135,10 @@ app.UseAuthorization();
 
 // 4. Conectar las rutas URL con los controladores
 app.MapControllers();
+
+// Cualquier ruta que no matchee un controlador ni un archivo estático
+// se resuelve como una ruta cliente del frontend (SPA fallback).
+app.MapFallbackToFile("index.html");
 
 app.Run();
 

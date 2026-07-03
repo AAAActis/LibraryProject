@@ -14,8 +14,7 @@ public class CrearLibroDto
     public string? Titulo { get; set; }
     [Required(ErrorMessage = "El autor es obligatorio.")]
     public string? Autor { get; set; }
-    [Required(ErrorMessage = "El año de publicación es obligatorio.")]
-    public string? AñoPublicacion { get; set; }
+    public int AnioPublicacion { get; set; }
     [Required(ErrorMessage = "La cantidad de páginas es obligatoria.")]
     public int CantPaginas { get; set; }
 }

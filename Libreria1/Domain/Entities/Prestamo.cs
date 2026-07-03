@@ -36,7 +36,7 @@ public class Prestamo : IEntidad<Guid>
         Id = Guid.NewGuid();
         LibroPrestado = libro;
         UsuarioAsignado = usuario;
-        FechaPrestamo = DateTime.Now;
+        FechaPrestamo = DateTime.UtcNow; // UTC: la columna es "timestamp with time zone" (Npgsql exige Kind=Utc)
         FechaDevolucion = FechaPrestamo.AddDays(14); // Plazo de 14 días para la devolución
         Activo = true;
         LibroPrestado.MarcarPrestado();

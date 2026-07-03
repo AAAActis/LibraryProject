@@ -54,6 +54,8 @@ namespace Libreria1.Controllers
                     Isbn = l.Isbn,
                     Titulo = l.Titulo,
                     Autor = l.Autor,
+                    AnioPublicacion = l.AñoPublicacion,
+                    CantPaginas = l.CantPaginas,
                     EstaDisponible = l.EstaDisponible
                 }).ToList();
 
@@ -80,11 +82,13 @@ namespace Libreria1.Controllers
                     Isbn = libro.Isbn,
                     Titulo = libro.Titulo,
                     Autor = libro.Autor,
+                    AnioPublicacion = libro.AñoPublicacion,
+                    CantPaginas = libro.CantPaginas,
                     EstaDisponible = libro.EstaDisponible
                 };
 
                 return Ok(libroDto);
-            
+
 
         }
 
@@ -112,7 +116,7 @@ namespace Libreria1.Controllers
                     return Conflict(new { mensaje = $"El libro con ISBN {dto.ISBN} ya existe en el sistema." });
                 }
                 // Instancia del Dominio
-                var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor, int.Parse(dto.AñoPublicacion), dto.CantPaginas);
+                var nuevoLibro = new Libro(dto.ISBN, dto.Titulo, dto.Autor, dto.AnioPublicacion, dto.CantPaginas);
                 _catalogo.AgregarLibro(nuevoLibro);
 
                 // DTO de respuesta
@@ -121,6 +125,8 @@ namespace Libreria1.Controllers
                     Isbn = nuevoLibro.Isbn,
                     Titulo = nuevoLibro.Titulo,
                     Autor = nuevoLibro.Autor,
+                    AnioPublicacion = nuevoLibro.AñoPublicacion,
+                    CantPaginas = nuevoLibro.CantPaginas,
                     EstaDisponible = nuevoLibro.EstaDisponible
                 };
 

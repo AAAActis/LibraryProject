@@ -93,6 +93,26 @@ namespace Libreria1.Repositories
             return reader.Read() ? MapearUsuario(reader) : null;
         }
  
+        // UPDATE usuarios SET ... WHERE id = @id
+        public void Actualizar(Usuario usuario)
+        {
+            const string query = @"
+                UPDATE usuarios
+                SET nombre = @nombre, apellido = @apellido, email = @email
+                WHERE id = @id";
+
+            using var connection = new NpgsqlConnection(_connectionString);
+            using var command = new NpgsqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", usuario.Id);
+            command.Parameters.AddWithValue("@nombre", usuario.Nombre);
+            command.Parameters.AddWithValue("@apellido", usuario.Apellido);
+            command.Parameters.AddWithValue("@email", usuario.Email);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+
         // DELETE FROM usuarios WHERE id = @id
         public void Eliminar(Guid id)
         {

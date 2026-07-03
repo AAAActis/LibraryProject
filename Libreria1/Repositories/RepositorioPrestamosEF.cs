@@ -16,6 +16,11 @@ public class RepositorioPrestamosEF : IRepositorio<Prestamo, Guid>
 
         public void Agregar(Prestamo prestamo)
         {
+            // El Libro y el Usuario llegan desconectados (AsNoTracking) desde ServicioPrestamo.
+            // Sin adjuntarlos explícitamente, EF Core los trata como entidades nuevas al hacer
+            // Prestamos.Add(...) e intenta re-insertarlos, violando la PK ya existente.
+            _context.Entry(prestamo.LibroPrestado).State = EntityState.Modified; // EstaDisponible cambió
+            _context.Entry(prestamo.UsuarioAsignado).State = EntityState.Unchanged;
             _context.Prestamos.Add(prestamo);
             _context.SaveChanges();
         }
